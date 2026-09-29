@@ -634,6 +634,12 @@
 .skills__left span:nth-child(3) {
     transform: rotate(45deg);
 }
+.skills__left span:nth-child(4) {
+    transform: rotate(0deg);
+}
+.skills__left span:nth-child(5) {
+    transform: rotate(90deg);
+}
 
 .skill--item {
     position: absolute;
@@ -664,8 +670,24 @@
     box-shadow: 0px 4px 40px rgba(255, 218, 80, 0.4);
 }
 .skill--item-wrap-2 .skill--item:nth-child(2) {
-    background-color: #FFDA50;
-    box-shadow: 0px 4px 40px rgba(255, 218, 80, 0.4);
+    background-color: #61DAFB;
+    box-shadow: 0px 4px 40px rgba(97, 218, 251, 0.4);
+}
+.skill--item-wrap-3 .skill--item:nth-child(1) {
+    background-color: #38BDF8;
+    box-shadow: 0px 4px 40px rgba(56, 189, 248, 0.4);
+}
+.skill--item-wrap-3 .skill--item:nth-child(2) {
+    background-color: #3ECF8E;
+    box-shadow: 0px 4px 40px rgba(62, 207, 142, 0.4);
+}
+.skill--item-wrap-4 .skill--item:nth-child(1) {
+    background-color: #f89820;
+    box-shadow: 0px 4px 40px rgba(248, 152, 32, 0.4);
+}
+.skill--item-wrap-4 .skill--item:nth-child(2) {
+    background-color: #6db33f;
+    box-shadow: 0px 4px 40px rgba(109, 179, 63, 0.4);
 }
 .skill--img {
     width: 100%;
@@ -675,6 +697,14 @@
 }
 .skill--img-right {
     transform: rotate(-45deg);
+    border-radius: 50%;
+}
+.skill--img-vertical {
+    transform: rotate(0deg);
+    border-radius: 50%;
+}
+.skill--img-horizontal {
+    transform: rotate(-90deg);
     border-radius: 50%;
 }
 /* education */
