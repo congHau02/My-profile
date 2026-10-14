@@ -55,21 +55,35 @@ html {
     position: absolute;
     color: #000;
     filter: drop-shadow(0px 0px 10px #000);
-    -webkit-tap-highlight-color: transparent; /* Dành cho trình duyệt WebKit (Chrome, Safari, Android) */
+    -webkit-tap-highlight-color: transparent;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -200%);
-    transition: all ease-in 1s;
+    opacity: 0;
+    pointer-events: none;
+    transition: all ease-in 0.5s;
 }
 .icon-light {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    -webkit-tap-highlight-color: transparent; /* Dành cho trình duyệt WebKit (Chrome, Safari, Android) */
+    opacity: 1;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: transparent;
     color: #fbfbaa;
     filter: drop-shadow(0px 0px 10px #fbfbaa);
-    transition: all ease-in 1s;
+    transition: all ease-in 0.5s;
+}
+html.light .icon-dark {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+    pointer-events: auto;
+}
+html.light .icon-light {
+    transform: translate(-50%, 100%);
+    opacity: 0;
+    pointer-events: none;
 }
 /* Tùy chỉnh toàn bộ thanh cuộn */
 ::-webkit-scrollbar {
@@ -147,7 +161,8 @@ a {
 
 .btn,
 .btn-2,
-.btn-blue {
+.btn-blue,
+.btn-github {
     min-width: 80px;
     padding: 12px 20px;
     font-size: 1.6rem;
@@ -181,6 +196,28 @@ a {
     color: var(--blue-2);
     background: -o-linear-gradient(308deg, #fff, #fff) padding-box, -o-linear-gradient(308deg, var(--blue-1), var(--blue-2)) border-box;    
     background: linear-gradient(142deg, #fff, #fff) padding-box, linear-gradient(142deg, var(--blue-1), var(--blue-2)) border-box;
+}
+.btn-github {
+    color: #fff;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+    filter: drop-shadow(0px 0px 10px rgba(255, 255, 255, 0.15));
+    background: -o-linear-gradient(308deg, #374151, #1f2937) padding-box, -o-linear-gradient(308deg, #6b7280, #374151) border-box;    
+    background: linear-gradient(142deg, #374151, #1f2937) padding-box, linear-gradient(142deg, #6b7280, #374151) border-box;
+}
+.btn-github:hover {
+    color: #1f2937;
+    background: -o-linear-gradient(308deg, #fff, #fff) padding-box, -o-linear-gradient(308deg, #9ca3af, #374151) border-box;    
+    background: linear-gradient(142deg, #fff, #fff) padding-box, linear-gradient(142deg, #9ca3af, #374151) border-box;
+    box-shadow: 0px 0px 14px rgba(255, 255, 255, 0.35);
+}
+html.light .btn-github {
+    color: #fff;
+    background: linear-gradient(142deg, #24292e, #181717) padding-box, linear-gradient(142deg, #24292e, #181717) border-box;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.12);
+}
+html.light .btn-github:hover {
+    color: #181717;
+    background: linear-gradient(142deg, #fff, #fff) padding-box, linear-gradient(142deg, #24292e, #57606a) border-box;
 }
 /* icon */
 .home-icon img,

@@ -65,30 +65,43 @@ window.addEventListener('keydown', function(event) {
     }
 });
 
-// Light Mode 
-const lightMode = document.querySelectorAll('.icon-light');
-const darkMode = document.querySelectorAll('.icon-dark');
-const htmlWeb = document.querySelector('html');
-lightMode.forEach(function(lightElem) {
-    lightElem.addEventListener('click', function() {
+// Light Mode & Dark Mode with LocalStorage persistence
+const htmlWeb = document.documentElement;
+
+function switchTheme(theme) {
+    if (theme === 'light') {
         htmlWeb.classList.add('light');
-        darkMode.forEach(function(darkElem) {
-            darkElem.style.transform = 'translate(-50%, -50%)';
-            darkElem.style.opacity = '1';
-        });
-        lightElem.style.transform = 'translate(-50%, 100%)';
-        lightElem.style.opacity = '0';
+        try {
+            localStorage.setItem('portfolio-theme', 'light');
+        } catch (e) {}
+    } else {
+        htmlWeb.classList.remove('light');
+        try {
+            localStorage.setItem('portfolio-theme', 'dark');
+        } catch (e) {}
+    }
+}
+
+document.querySelectorAll('.icon-light').forEach(function(lightElem) {
+    lightElem.addEventListener('click', function(e) {
+        e.stopPropagation();
+        switchTheme('light');
     });
 });
 
-darkMode.forEach(function(darkElem) {
-    darkElem.addEventListener('click', function() {
-        htmlWeb.classList.remove('light');
-        lightMode.forEach(function(lightElem) {
-            lightElem.style.transform = 'translate(-50%, -50%)';
-            lightElem.style.opacity = '1';
-        });
-        darkElem.style.transform = 'translate(-50%, -200%)';
-        darkElem.style.opacity = '0';
+document.querySelectorAll('.icon-dark').forEach(function(darkElem) {
+    darkElem.addEventListener('click', function(e) {
+        e.stopPropagation();
+        switchTheme('dark');
+    });
+});
+
+document.querySelectorAll('.light--mode').forEach(function(wrapper) {
+    wrapper.addEventListener('click', function() {
+        if (htmlWeb.classList.contains('light')) {
+            switchTheme('dark');
+        } else {
+            switchTheme('light');
+        }
     });
 });
