@@ -123,8 +123,96 @@
     }
 
     /* skill */
-    .skills__left span {
-        height: 340px;
+    .skills__left {
+        height: 350px;
     }
-   
+    .skills__left::before {
+        width: 300px;
+        height: 300px;
+    }
+    .skills__left::after {
+        width: 180px;
+        height: 180px;
+    }
+    .skills__left > span {
+        height: 300px;
+    }
+    .skills--user {
+        width: 80px;
+        height: 80px;
+        border-radius: 20px;
+    }
+    .skill--item {
+        width: 56px;
+        height: 56px;
+    }
+    .skill--img {
+        width: 30px;
+        height: 30px;
+    }
+    .skill--tooltip {
+        font-size: 1.1rem;
+        padding: 4px 8px;
+    }
+    .skills__right {
+        margin-top: 40px;
+    }
+
+    /* deploy pipeline */
+    .deploy-pipeline {
+        padding: 24px 16px;
+        margin-top: 36px;
+    }
+    .deploy-pipeline__title {
+        font-size: 1.8rem;
+    }
+    .deploy-pipeline__flow {
+        flex-direction: column;
+        gap: 6px;
+    }
+    .deploy-step {
+        width: 100%;
+        min-width: unset;
+        flex-direction: row;
+        text-align: left;
+        gap: 14px;
+        padding: 12px 16px;
+    }
+    .deploy-step__icon-box {
+        margin-bottom: 0;
+        flex-shrink: 0;
+    }
+    .deploy-connector {
+        margin: 4px 0;
+    }
+    .deploy-connector__line {
+        width: 2px;
+        height: 18px;
+    }
+    .deploy-connector__arrow {
+        transform: rotate(90deg);
+        margin-top: 2px;
+    }
+    .deploy-connector--oidc {
+        padding-top: 0;
+        padding-left: 70px;
+    }
+    .deploy-connector--oidc .deploy-connector__tag {
+        position: static;
+        margin-bottom: 4px;
+    }
+    .deploy-foundation__card {
+        padding: 14px 16px;
+    }
+    .deploy-foundation__name {
+        font-size: 1.45rem;
+    }
+
+    /* education */
+    .edu-card {
+        padding: 20px 18px;
+    }
+    .edu-card__title {
+        font-size: 1.6rem;
+    }
 }
