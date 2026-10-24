@@ -29,6 +29,11 @@ const STATE = {
     SLEEPING: 'SLEEPING'
 };
 
+const BIRD_W = 140;
+const BIRD_H = 130;
+const HALF_W = 70;
+const HALF_H = 65;
+
 let currentState = STATE.IDLE_HERO;
 let companionEl = null;
 let posX = 0;
@@ -129,8 +134,8 @@ function getPerchTarget() {
     if (candidates.length === 0) return null;
     const chosen = candidates[Math.floor(Math.random() * candidates.length)];
     return {
-        x: Math.max(20, Math.min(window.innerWidth - 160, chosen.left + chosen.width / 2 - 70)),
-        y: Math.max(40, Math.min(window.innerHeight - 150, chosen.top - 95))
+        x: Math.max(20, Math.min(window.innerWidth - (BIRD_W + 20), chosen.left + chosen.width / 2 - HALF_W)),
+        y: Math.max(40, Math.min(window.innerHeight - (BIRD_H + 20), chosen.top - 100))
     };
 }
 
@@ -182,16 +187,17 @@ function stepRoaming() {
     }, flightTime * 1000 + 400);
 }
 
-// Flee when cursor gets near (< 90px)
+// Flee when cursor gets near (< 65px roaming, < 40px perched)
 window.addEventListener('mousemove', function(e) {
     if (currentState !== STATE.ROAMING && currentState !== STATE.PERCHING) return;
     if (!companionEl || companionEl.style.display === 'none') return;
     
-    const centerX = posX + 70;
-    const centerY = posY + 66;
+    const centerX = posX + HALF_W;
+    const centerY = posY + HALF_H;
     const dist = Math.hypot(e.clientX - centerX, e.clientY - centerY);
     
-    if (dist < 90) {
+    const threshold = currentState === STATE.PERCHING ? 40 : 65;
+    if (dist < threshold) {
         fleeFromCursor(e.clientX, e.clientY);
     }
 });
@@ -203,16 +209,16 @@ function fleeFromCursor(cursorX, cursorY) {
     companionEl.classList.remove('is-perched');
     companionEl.classList.add('is-fleeing');
     
-    const centerX = posX + 70;
-    const centerY = posY + 66;
+    const centerX = posX + HALF_W;
+    const centerY = posY + HALF_H;
     const angle = Math.atan2(centerY - cursorY, centerX - cursorX);
     const fleeDistance = 180 + Math.random() * 120;
     
-    let nx = centerX + Math.cos(angle) * fleeDistance - 70;
-    let ny = centerY + Math.sin(angle) * fleeDistance - 66;
+    let nx = centerX + Math.cos(angle) * fleeDistance - HALF_W;
+    let ny = centerY + Math.sin(angle) * fleeDistance - HALF_H;
     
-    nx = Math.max(30, Math.min(window.innerWidth - 170, nx));
-    ny = Math.max(50, Math.min(window.innerHeight - 170, ny));
+    nx = Math.max(30, Math.min(window.innerWidth - (BIRD_W + 30), nx));
+    ny = Math.max(50, Math.min(window.innerHeight - (BIRD_H + 40), ny));
     
     const facingRight = nx >= posX;
     moveCompanion(nx, ny, 0.55, facingRight);
@@ -233,8 +239,8 @@ function catchBird(e) {
     
     if (currentState === STATE.RETURNING) return;
     
-    const clickX = e.clientX || (posX + 70);
-    const clickY = e.clientY || (posY + 66);
+    const clickX = e.clientX || (posX + HALF_W);
+    const clickY = e.clientY || (posY + HALF_H);
     
     createFeatherBurst(clickX, clickY);
     showSpeechBubble(companionEl, 'Ouch!');
@@ -255,8 +261,8 @@ function catchBird(e) {
     const isHeroVisible = heroRect.bottom > -100 && heroRect.top < window.innerHeight + 100;
     
     if (isHeroVisible) {
-        const targetX = heroRect.left + (heroRect.width - 140) / 2;
-        const targetY = heroRect.top + (heroRect.height - 133) / 2;
+        const targetX = heroRect.left + (heroRect.width - BIRD_W) / 2;
+        const targetY = heroRect.top + (heroRect.height - BIRD_H) / 2;
         const facingRight = targetX >= posX;
         moveCompanion(targetX, targetY, 1.2, facingRight);
         
@@ -338,8 +344,8 @@ function launchCompanion() {
     if (window.innerWidth < 768 || currentState === STATE.SLEEPING || !boxBird) return;
     
     const heroRect = boxBird.getBoundingClientRect();
-    posX = heroRect.left + (heroRect.width - 140) / 2;
-    posY = heroRect.top + (heroRect.height - 133) / 2;
+    posX = heroRect.left + (heroRect.width - BIRD_W) / 2;
+    posY = heroRect.top + (heroRect.height - BIRD_H) / 2;
     
     ensureCompanionElement();
     companionEl.style.display = 'block';

@@ -71,13 +71,12 @@
 .box__img {
     display: block;
     margin: auto;
-    background: #fff url(../../assets/img/bird-Photoroom.webp);
+    background: #fff url(../../assets/img/bird-Photoroom.webp) no-repeat;
     height: 166.67px;
     width: 180px;
-    padding: 50px;
     border-radius: 999px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    animation: bird_animation 1.5s infinite steps(1);
+    animation: bird_animation 1.4s infinite steps(1);
     position: relative;
     cursor: pointer;
     transition: opacity 0.4s ease, transform 0.4s ease;
@@ -86,10 +85,9 @@
 }
 
 .box__img.is-flying-away {
-    opacity: 0.15;
-    filter: grayscale(0.8) blur(1px);
-    transform: scale(0.95);
+    opacity: 0;
     pointer-events: none;
+    transform: scale(0.9);
 }
 
 .box__img.is-sleeping {
@@ -113,7 +111,7 @@
     top: 0;
     left: 0;
     width: 140px;
-    height: 133px;
+    height: 130px;
     z-index: 9999;
     pointer-events: auto;
     cursor: pointer;
@@ -133,28 +131,46 @@
 }
 
 .bird-companion__sprite-wrap {
-    width: 100%;
-    height: 100%;
+    width: 140px;
+    height: 130px;
     position: relative;
     transition: transform 0.3s ease;
     transform-origin: center center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .bird-companion__sprite {
     width: 180px;
     height: 166.67px;
-    padding: 50px;
-    box-sizing: content-box;
-    background: #fff url(../../assets/img/bird-Photoroom.webp);
+    padding: 0;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    background: #fff url(../../assets/img/bird-Photoroom.webp) no-repeat;
     border-radius: 999px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    animation: bird_animation 1.5s infinite steps(1);
-    transform: scale(0.5);
-    transform-origin: 0 0;
+    animation: bird_animation 1.4s infinite steps(1);
+    transform: scale(0.7778);
+    transform-origin: center center;
+}
+
+.bird-companion.is-fleeing .bird-companion__sprite {
+    animation-duration: 0.8s;
 }
 
 .bird-companion.is-perched .bird-companion__sprite {
-    animation-duration: 3s;
+    animation: bird_perch_breath 2s ease-in-out infinite alternate !important;
+    background-position: -720px -166.67px !important;
+}
+
+@keyframes bird_perch_breath {
+    0% {
+        transform: scale(0.7778) translateY(0);
+    }
+    100% {
+        transform: scale(0.7778) translateY(-4px);
+    }
 }
 
 /* Sleep zZz Container */
@@ -283,49 +299,49 @@ html:not(.light) .bird-speech-bubble::after {
 
 @keyframes bird_animation {
     0% {
-        background-position: -0px -0px;
+        background-position: 0px 0px;
     }
-    7.2% {
-        background-position: -180px -0px;
+    7.14% {
+        background-position: -180px 0px;
     }
-    14.4% {
-        background-position: -360px -0px;
+    14.29% {
+        background-position: -360px 0px;
     }
-    21.6% {
-        background-position: -540px -0px;
+    21.43% {
+        background-position: -540px 0px;
     }
-    28.8% {
-        background-position: -720px -0px;
+    28.57% {
+        background-position: -720px 0px;
     }
-    36% {
-        background-position: -0px -166.67px;
+    35.71% {
+        background-position: 0px -166.67px;
     }
-    43.2% {
+    42.86% {
         background-position: -180px -166.67px;
     }
-    50.4% {
+    50.00% {
         background-position: -360px -166.67px;
     }
-    57.6% {
+    57.14% {
         background-position: -540px -166.67px;
     }
-    64.8% {
+    64.29% {
         background-position: -720px -166.67px;
     }
-    72% {
-        background-position: -0px -333.34px;
+    71.43% {
+        background-position: 0px -333.34px;
     }
-    79.2% {
+    78.57% {
         background-position: -180px -333.34px;
     }
-    86.4% {
+    85.71% {
         background-position: -360px -333.34px;
     } 
-    93.6% {
+    92.86% {
         background-position: -540px -333.34px;
     } 
     100% {
-        background-position: -720px -333.34px;
+        background-position: 0px 0px;
     } 
 }
 .box__img2 {
