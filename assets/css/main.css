@@ -63,7 +63,9 @@
 .home__clip {
     position: relative;
     padding: 100px;
-    transition: transform ease-in-out 2s, opacity ease-in 0.5s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .box__img {
@@ -74,7 +76,209 @@
     width: 180px;
     padding: 50px;
     border-radius: 999px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     animation: bird_animation 1.5s infinite steps(1);
+    position: relative;
+    cursor: pointer;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.box__img.is-flying-away {
+    opacity: 0.15;
+    filter: grayscale(0.8) blur(1px);
+    transform: scale(0.95);
+    pointer-events: none;
+}
+
+.box__img.is-sleeping {
+    animation: bird_sleep_breath 2.5s ease-in-out infinite alternate !important;
+    background-position: 0 0 !important;
+    filter: brightness(0.92);
+}
+
+@keyframes bird_sleep_breath {
+    0% {
+        transform: scale(0.98) translateY(0);
+    }
+    100% {
+        transform: scale(1.02) translateY(6px);
+    }
+}
+
+/* Companion Bird Engine */
+.bird-companion {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 140px;
+    height: 133px;
+    z-index: 9999;
+    pointer-events: auto;
+    cursor: pointer;
+    will-change: transform;
+    user-select: none;
+    -webkit-user-drag: none;
+    touch-action: none;
+    transition: transform 1.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.bird-companion.is-fleeing {
+    transition: transform 0.55s cubic-bezier(0.2, 0.85, 0.3, 1) !important;
+}
+
+.bird-companion.is-returning {
+    transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease !important;
+}
+
+.bird-companion__sprite-wrap {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.3s ease;
+    transform-origin: center center;
+}
+
+.bird-companion__sprite {
+    width: 180px;
+    height: 166.67px;
+    padding: 50px;
+    box-sizing: content-box;
+    background: #fff url(../../assets/img/bird-Photoroom.webp);
+    border-radius: 999px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    animation: bird_animation 1.5s infinite steps(1);
+    transform: scale(0.5);
+    transform-origin: 0 0;
+}
+
+.bird-companion.is-perched .bird-companion__sprite {
+    animation-duration: 3s;
+}
+
+/* Sleep zZz Container */
+.bird-sleep-container {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.bird-sleep-z {
+    position: absolute;
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    color: #00e5ff;
+    opacity: 0;
+    user-select: none;
+    animation: zZz_float 2.4s infinite ease-in;
+    text-shadow: 0 2px 8px rgba(0, 229, 255, 0.6);
+}
+
+.bird-sleep-z:nth-child(1) {
+    font-size: 14px;
+    animation-delay: 0s;
+}
+.bird-sleep-z:nth-child(2) {
+    font-size: 18px;
+    animation-delay: 0.8s;
+}
+.bird-sleep-z:nth-child(3) {
+    font-size: 24px;
+    animation-delay: 1.6s;
+}
+
+@keyframes zZz_float {
+    0% {
+        opacity: 0;
+        transform: translate(0, 0) scale(0.6);
+    }
+    30% {
+        opacity: 0.9;
+        transform: translate(12px, -20px) scale(0.9);
+    }
+    70% {
+        opacity: 0.8;
+        transform: translate(22px, -45px) scale(1.1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(32px, -70px) scale(1.3);
+    }
+}
+
+/* Comic Speech Bubble */
+.bird-speech-bubble {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translate(-50%, -10px) scale(0);
+    background: #ffffff;
+    color: #111827;
+    font-family: 'Sora', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 10001;
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+}
+
+.bird-speech-bubble::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #ffffff transparent transparent transparent;
+}
+
+.bird-speech-bubble.active {
+    transform: translate(-50%, -18px) scale(1);
+    opacity: 1;
+}
+
+html:not(.light) .bird-speech-bubble {
+    background: #1e293b;
+    color: #38bdf8;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+
+html:not(.light) .bird-speech-bubble::after {
+    border-color: #1e293b transparent transparent transparent;
+}
+
+/* Feather Particles */
+.bird-feather {
+    position: fixed;
+    width: 12px;
+    height: 22px;
+    pointer-events: none;
+    z-index: 10000;
+    border-radius: 50% 50% 50% 50% / 80% 80% 20% 20%;
+    opacity: 0.95;
+    will-change: transform, opacity;
+    animation: feather_fade 1.1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes feather_fade {
+    0% {
+        opacity: 0.95;
+        transform: translate(0, 0) rotate(0deg) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.35);
+    }
 }
 
 @keyframes bird_animation {
