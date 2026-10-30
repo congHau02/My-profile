@@ -22,6 +22,15 @@
         width: 48px;
         height: 48px;
     }
+    .ai-chatbot-window {
+        width: calc(100% - 32px);
+        height: 75vh;
+        right: 16px;
+        bottom: 16px;
+        max-width: none;
+        max-height: none;
+        border-radius: 16px;
+    }
     .container {
         overflow: hidden;
         padding: 0 20px;

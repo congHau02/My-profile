@@ -205,6 +205,79 @@ function matchIntent(rawQuery) {
 }
 
 /**
+ * Safe, zero-dependency micro-markdown parser.
+ * Converts:
+ * - HTML characters to safe entities (& < > ")
+ * - **bold text** to <strong>bold text</strong>
+ * - [link text](url) to <a href="url" target="_blank" rel="noopener noreferrer">link text</a>
+ * - bullet points • to <span class="ai-chatbot-bullet">•</span>
+ * - linebreaks \n to <br>
+ *
+ * @param {string} text - Raw markdown-formatted string
+ * @returns {string} Safe HTML string
+ */
+function formatMarkdown(text) {
+  if (typeof text !== 'string') return '';
+
+  // 1. Sanitize HTML entities to prevent XSS injection
+  let safe = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+
+  // 2. Bold text: **text** -> <strong>text</strong>
+  safe = safe.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+  // 3. Hyperlinks: [text](url) -> <a href="url" target="_blank" rel="noopener noreferrer">text</a>
+  safe = safe.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+|#[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+
+  // 4. Bullet points: • -> <span class="ai-chatbot-bullet">•</span>
+  safe = safe.replace(/•/g, '<span class="ai-chatbot-bullet">•</span>');
+
+  // 5. Line breaks: \n -> <br>
+  safe = safe.replace(/\n/g, '<br>');
+
+  return safe;
+}
+
+/**
+ * Appends a message bubble to the chatbot message feed.
+ *
+ * @param {string} text - Message text (markdown for bot, plain text for user)
+ * @param {'bot'|'user'} [sender='bot'] - Message author
+ * @param {HTMLElement} [container] - Optional custom message container element
+ * @returns {HTMLElement|null} The created message DOM node
+ */
+function appendChatMessage(text, sender = 'bot', container) {
+  if (typeof document === 'undefined') return null;
+
+  const messagesFeed = container || document.getElementById('ai-chatbot-messages');
+  if (!messagesFeed) return null;
+
+  const messageEl = document.createElement('div');
+  messageEl.classList.add('ai-chatbot-message', `ai-chatbot-message--${sender}`);
+
+  const bubbleEl = document.createElement('div');
+  bubbleEl.classList.add('ai-chatbot-message__bubble');
+
+  if (sender === 'bot') {
+    bubbleEl.innerHTML = formatMarkdown(text);
+  } else {
+    // Sanitize user text by setting textContent
+    bubbleEl.textContent = text;
+  }
+
+  messageEl.appendChild(bubbleEl);
+  messagesFeed.appendChild(messageEl);
+
+  // Auto-scroll to bottom of message feed
+  messagesFeed.scrollTop = messagesFeed.scrollHeight;
+
+  return messageEl;
+}
+
+/**
  * Initializes the floating action button toggle behavior.
  * Handles opening/closing state, accessible labels (aria-label & aria-expanded),
  * and syncs with the chat window if present.
@@ -225,16 +298,111 @@ function initChatbotToggle() {
     const chatWindow = document.getElementById('ai-chatbot-window');
     if (chatWindow) {
       chatWindow.classList.toggle('active', nextState);
+      if (typeof chatWindow.setAttribute === 'function') {
+        chatWindow.setAttribute('aria-hidden', String(!nextState));
+      }
+      if (nextState) {
+        const inputField = document.getElementById('ai-chatbot-input');
+        if (inputField && typeof inputField.focus === 'function') {
+          setTimeout(() => inputField.focus(), 150);
+        }
+      }
     }
   });
+}
+
+/**
+ * Initializes the chat window interface:
+ * - Wire up close button to dismiss the window and sync FAB toggle
+ * - Wire up form submit & input Enter key / Send button click
+ * - Auto-scrolls and manages focus for accessibility
+ */
+function initChatbotWindow() {
+  if (typeof document === 'undefined') return;
+
+  const chatWindow = document.getElementById('ai-chatbot-window');
+  const toggleBtn = document.getElementById('ai-chatbot-toggle');
+  const closeBtn = document.getElementById('ai-chatbot-close');
+  const inputField = document.getElementById('ai-chatbot-input');
+  const sendBtn = document.getElementById('ai-chatbot-send');
+  const chatForm = document.getElementById('ai-chatbot-form');
+  const messagesFeed = document.getElementById('ai-chatbot-messages');
+
+  function closeChat() {
+    if (chatWindow) {
+      chatWindow.classList.remove('active');
+      if (typeof chatWindow.setAttribute === 'function') {
+        chatWindow.setAttribute('aria-hidden', 'true');
+      }
+    }
+    if (toggleBtn) {
+      toggleBtn.classList.remove('active');
+      if (typeof toggleBtn.setAttribute === 'function') {
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        toggleBtn.setAttribute('aria-label', 'Mở trợ lý ảo Công Hậu');
+      }
+      if (typeof toggleBtn.focus === 'function') {
+        toggleBtn.focus();
+      }
+    }
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeChat);
+  }
+
+  function handleMessageSubmit(e) {
+    if (e && typeof e.preventDefault === 'function') {
+      e.preventDefault();
+    }
+    if (!inputField) return;
+
+    const query = inputField.value ? inputField.value.trim() : '';
+    if (!query) return;
+
+    // Clear input field
+    inputField.value = '';
+
+    // Append user message
+    appendChatMessage(query, 'user', messagesFeed);
+
+    if (typeof inputField.focus === 'function') {
+      inputField.focus();
+    }
+  }
+
+  if (chatForm) {
+    chatForm.addEventListener('submit', handleMessageSubmit);
+  }
+
+  if (sendBtn && !chatForm) {
+    sendBtn.addEventListener('click', handleMessageSubmit);
+  }
+
+  // Also support Enter key directly on input if not inside form
+  if (inputField && !chatForm) {
+    inputField.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        handleMessageSubmit(e);
+      }
+    });
+  }
+}
+
+/**
+ * Main initialization entrypoint.
+ */
+function initChatbot() {
+  initChatbotToggle();
+  initChatbotWindow();
 }
 
 // Auto-initialize when running in a browser environment
 if (typeof document !== 'undefined') {
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initChatbotToggle);
+    document.addEventListener('DOMContentLoaded', initChatbot);
   } else {
-    initChatbotToggle();
+    initChatbot();
   }
 }
 
@@ -245,7 +413,11 @@ if (typeof module !== 'undefined' && module.exports) {
     normalizeText,
     scoreIntent,
     matchIntent,
-    initChatbotToggle
+    formatMarkdown,
+    appendChatMessage,
+    initChatbotToggle,
+    initChatbotWindow,
+    initChatbot
   };
 }
 
@@ -254,7 +426,11 @@ if (typeof window !== 'undefined') {
   window.normalizeText = normalizeText;
   window.scoreIntent = scoreIntent;
   window.matchIntent = matchIntent;
+  window.formatMarkdown = formatMarkdown;
+  window.appendChatMessage = appendChatMessage;
   window.initChatbotToggle = initChatbotToggle;
+  window.initChatbotWindow = initChatbotWindow;
+  window.initChatbot = initChatbot;
 }
 
 

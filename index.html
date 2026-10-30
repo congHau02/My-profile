@@ -136,6 +136,55 @@
                 </svg>
             </div>
         </button>
+
+        <!-- AI Chatbot Window -->
+        <section id="ai-chatbot-window" class="ai-chatbot-window" aria-label="Cửa sổ trò chuyện với Trợ lý ảo" role="region" aria-hidden="true">
+            <header class="ai-chatbot-window__header">
+                <div class="ai-chatbot-window__header-info">
+                    <div class="ai-chatbot-window__avatar">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19.5 10.5C19.5 6.36 15.69 3 11 3C6.31 3 2.5 6.36 2.5 10.5C2.5 12.87 3.65 14.97 5.46 16.36C5.3 17.2 4.88 18.3 3.98 19.34C3.82 19.52 3.94 19.8 4.18 19.81C6.23 19.9 7.97 19.04 9.04 18.33C9.67 18.45 10.33 18.5 11 18.5C15.69 18.5 19.5 15.14 19.5 10.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                            <path d="M11 6.5C11 8.2 12.3 9.5 14 9.5C12.3 9.5 11 10.8 11 12.5C11 10.8 9.7 9.5 8 9.5C9.7 9.5 11 8.2 11 6.5Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="ai-chatbot-window__title-group">
+                        <h3 class="ai-chatbot-window__title">Trợ lý ảo Công Hậu</h3>
+                        <div class="ai-chatbot-window__status">
+                            <span class="ai-chatbot-window__status-dot"></span>
+                            <span class="ai-chatbot-window__status-text">Sẵn sàng hỗ trợ</span>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" id="ai-chatbot-close" class="ai-chatbot-window__close-btn" aria-label="Đóng cửa sổ trò chuyện">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                </button>
+            </header>
+
+            <div id="ai-chatbot-messages" class="ai-chatbot-window__body" role="log" aria-live="polite">
+                <!-- Messages flow will be rendered here -->
+            </div>
+
+            <footer class="ai-chatbot-window__footer">
+                <form id="ai-chatbot-form" class="ai-chatbot-window__input-wrap" onsubmit="return false;">
+                    <input 
+                        type="text" 
+                        id="ai-chatbot-input" 
+                        class="ai-chatbot-window__input" 
+                        placeholder="Hỏi về kỹ năng, dự án, học vấn..." 
+                        autocomplete="off"
+                        aria-label="Nhập câu hỏi của bạn"
+                    />
+                    <button type="submit" id="ai-chatbot-send" class="ai-chatbot-window__send-btn" aria-label="Gửi câu hỏi">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 2L11 13" />
+                            <path d="M22 2L15 22L11 13L2 9L22 2Z" />
+                        </svg>
+                    </button>
+                </form>
+            </footer>
+        </section>
         <div class="container">
             <!-- Home -->
             <section id="home" class="home">
