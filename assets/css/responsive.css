@@ -16,6 +16,12 @@
     .onTop {
         display: none;
     }
+    .ai-chatbot-toggle {
+        bottom: 16px;
+        right: 16px;
+        width: 48px;
+        height: 48px;
+    }
     .container {
         overflow: hidden;
         padding: 0 20px;

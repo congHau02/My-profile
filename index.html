@@ -117,7 +117,25 @@
         </div>
     </header>
     <main class="main">
-        <aside class="onTop onTop2"><a href="#" data-aos="fade-up" data-aos-anchor-placement="center-bottom"><img src="./assets/icon/Up.svg" alt="Top"></a></aside>
+        <aside class="onTop onTop2">
+            <a href="#" aria-label="Cuộn lên đầu trang">
+                <img src="./assets/icon/Up.svg" alt="Top">
+            </a>
+        </aside>
+
+        <!-- AI Chatbot Floating Trigger Button -->
+        <button type="button" id="ai-chatbot-toggle" class="ai-chatbot-toggle" aria-label="Mở trợ lý ảo Công Hậu" aria-expanded="false" aria-controls="ai-chatbot-window">
+            <div class="ai-chatbot-toggle__icon-wrap">
+                <svg class="ai-chatbot-toggle__icon" viewBox="0 0 24 24" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19.5 10.5C19.5 6.36 15.69 3 11 3C6.31 3 2.5 6.36 2.5 10.5C2.5 12.87 3.65 14.97 5.46 16.36C5.3 17.2 4.88 18.3 3.98 19.34C3.82 19.52 3.94 19.8 4.18 19.81C6.23 19.9 7.97 19.04 9.04 18.33C9.67 18.45 10.33 18.5 11 18.5C15.69 18.5 19.5 15.14 19.5 10.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                    <path d="M11 6.5C11 8.2 12.3 9.5 14 9.5C12.3 9.5 11 10.8 11 12.5C11 10.8 9.7 9.5 8 9.5C9.7 9.5 11 8.2 11 6.5Z" fill="currentColor"/>
+                    <path d="M15.5 11C15.5 12 16.3 12.8 17.3 12.8C16.3 12.8 15.5 13.6 15.5 14.6C15.5 13.6 14.7 12.8 13.7 12.8C14.7 12.8 15.5 12 15.5 11Z" fill="currentColor"/>
+                </svg>
+                <svg class="ai-chatbot-toggle__close-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+            </div>
+        </button>
         <div class="container">
             <!-- Home -->
             <section id="home" class="home">

@@ -4,11 +4,11 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] Chatbot floating trigger button (`#ai-chatbot-toggle`) is rendered at the bottom-right corner (`bottom: 24px; right: 24px; z-index: 999;`).
-- [ ] Chatbot trigger button contains an accessible label (`aria-label`, `aria-expanded`) and a crisp SVG icon featuring chat bubble and sparkles.
-- [ ] The `.onTop` scroll-to-top button is refactored from sticky to `position: fixed; bottom: 88px; right: 24px; z-index: 998;`.
-- [ ] On desktop and tablet viewports, both buttons stack vertically with comfortable spacing and never overlap.
-- [ ] On mobile viewports (width <= 739px), `.onTop` remains hidden while the chatbot trigger button stays visible with responsive margins.
-- [ ] Hover and active transitions on the toggle button match the site's accent colors and glowing effects.
+- [x] Chatbot floating trigger button (`#ai-chatbot-toggle`) is rendered at the bottom-right corner (`bottom: 24px; right: 24px; z-index: 999;`).
+- [x] Chatbot trigger button contains an accessible label (`aria-label`, `aria-expanded`) and a crisp SVG icon featuring chat bubble and sparkles.
+- [x] The `.onTop` scroll-to-top button is refactored from sticky to `position: fixed; bottom: 88px; right: 24px; z-index: 998;`.
+- [x] On desktop and tablet viewports, both buttons stack vertically with comfortable spacing and never overlap.
+- [x] On mobile viewports (width <= 739px), `.onTop` remains hidden while the chatbot trigger button stays visible with responsive margins.
+- [x] Hover and active transitions on the toggle button match the site's accent colors and glowing effects.

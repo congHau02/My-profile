@@ -204,13 +204,48 @@ function matchIntent(rawQuery) {
   return highestScore > 0 ? bestIntent : CHATBOT_KNOWLEDGE_BASE.fallback;
 }
 
+/**
+ * Initializes the floating action button toggle behavior.
+ * Handles opening/closing state, accessible labels (aria-label & aria-expanded),
+ * and syncs with the chat window if present.
+ */
+function initChatbotToggle() {
+  if (typeof document === 'undefined') return;
+
+  const toggleBtn = document.getElementById('ai-chatbot-toggle');
+  if (!toggleBtn) return;
+
+  toggleBtn.addEventListener('click', () => {
+    const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+    const nextState = !isExpanded;
+    toggleBtn.setAttribute('aria-expanded', String(nextState));
+    toggleBtn.setAttribute('aria-label', nextState ? 'Đóng trợ lý ảo Công Hậu' : 'Mở trợ lý ảo Công Hậu');
+    toggleBtn.classList.toggle('active', nextState);
+
+    const chatWindow = document.getElementById('ai-chatbot-window');
+    if (chatWindow) {
+      chatWindow.classList.toggle('active', nextState);
+    }
+  });
+}
+
+// Auto-initialize when running in a browser environment
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initChatbotToggle);
+  } else {
+    initChatbotToggle();
+  }
+}
+
 // Module export for Node.js / testing & browser globals
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
     CHATBOT_KNOWLEDGE_BASE,
     normalizeText,
     scoreIntent,
-    matchIntent
+    matchIntent,
+    initChatbotToggle
   };
 }
 
@@ -219,6 +254,8 @@ if (typeof window !== 'undefined') {
   window.normalizeText = normalizeText;
   window.scoreIntent = scoreIntent;
   window.matchIntent = matchIntent;
+  window.initChatbotToggle = initChatbotToggle;
 }
+
 
 
