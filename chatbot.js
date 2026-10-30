@@ -4,11 +4,6 @@
  */
 
 /**
- * Portfolio Personal Assistant - Core Knowledge Base & Intent Matching Engine
- * 100% Client-side, zero latency, zero backend dependencies.
- */
-
-/**
  * Static catalog of supported conversational intents.
  * Grounded strictly in Nguyen Cong Hau's verified background, skills, and projects.
  */
@@ -105,7 +100,7 @@ function normalizeText(text) {
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[đĐ]/g, 'd')
-    .replace(/[^\w\s]/g, ' ')
+    .replace(/[^\w\s]|_/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 }

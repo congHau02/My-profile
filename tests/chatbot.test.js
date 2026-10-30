@@ -88,6 +88,13 @@ describe('matchIntent', () => {
     assert.strictEqual(matchIntent('thời tiết').id, 'fallback');
   });
 
+  it('correctly matches queries for all 4 public github repositories', () => {
+    assert.strictEqual(matchIntent('SmartSalon').id, 'projects');
+    assert.strictEqual(matchIntent('The-Booking-Site').id, 'projects');
+    assert.strictEqual(matchIntent('POS_QUAN_LY_BAN_HANG').id, 'projects');
+    assert.strictEqual(matchIntent('My-profile').id, 'projects');
+  });
+
   it('matches intent variations with punctuation and extra whitespace', () => {
     assert.strictEqual(matchIntent('  Cho mình hỏi về kỹ năng của bạn nhé!  ').id, 'skills');
     assert.strictEqual(matchIntent('Bạn học trường nào? UTC?').id, 'education');
