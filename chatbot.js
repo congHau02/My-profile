@@ -242,14 +242,156 @@ function formatMarkdown(text) {
 }
 
 /**
+ * In-memory conversation state.
+ * Ephemeral: reloading resets the session cleanly.
+ */
+let hasGreeted = false;
+let isBotTyping = false;
+
+/**
+ * Resets ephemeral conversation state.
+ * Clears messages container and resets toggle/window states.
+ */
+function resetChatState() {
+  hasGreeted = false;
+  isBotTyping = false;
+  closeChat();
+  if (typeof document !== 'undefined') {
+    const messagesFeed = document.getElementById('ai-chatbot-messages');
+    if (messagesFeed) {
+      messagesFeed.innerHTML = '';
+      if (typeof messagesFeed.children === 'object' && Array.isArray(messagesFeed.children)) {
+        messagesFeed.children.length = 0;
+      }
+    }
+  }
+}
+
+/**
+ * Detects whether the current viewport is mobile (width <= 739px).
+ *
+ * @returns {boolean}
+ */
+function isMobileDevice() {
+  if (typeof window === 'undefined') return false;
+  if (typeof window.matchMedia === 'function') {
+    const mq = window.matchMedia('(max-width: 739px)');
+    if (mq && typeof mq.matches === 'boolean') {
+      return mq.matches;
+    }
+  }
+  if (typeof window.innerWidth === 'number') {
+    return window.innerWidth <= 739;
+  }
+  return false;
+}
+
+/**
+ * Smoothly scrolls the page to the target selector and shifts focus.
+ *
+ * @param {string} target - CSS selector (e.g. '#skills', '#info')
+ */
+function scrollToTarget(target) {
+  if (!target || typeof document === 'undefined') return;
+  try {
+    const el = document.querySelector(target);
+    if (el) {
+      if (typeof el.scrollIntoView === 'function') {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+      if (typeof el.focus === 'function') {
+        const hadTabIndex = el.hasAttribute && el.hasAttribute('tabindex');
+        if (!hadTabIndex && typeof el.setAttribute === 'function') {
+          el.setAttribute('tabindex', '-1');
+        }
+        el.focus({ preventScroll: true });
+        if (!hadTabIndex && typeof el.addEventListener === 'function') {
+          el.addEventListener('blur', () => {
+            if (typeof el.removeAttribute === 'function') {
+              el.removeAttribute('tabindex');
+            }
+          }, { once: true });
+        }
+      }
+    }
+  } catch (err) {
+    // Gracefully ignore selector errors
+  }
+}
+
+/**
+ * Appends a 3-dot typing indicator bubble to the messages feed.
+ *
+ * @param {HTMLElement} [container] - Optional custom message container
+ * @returns {HTMLElement|null} The typing indicator element
+ */
+function showTypingIndicator(container) {
+  if (typeof document === 'undefined') return null;
+
+  const messagesFeed = container || document.getElementById('ai-chatbot-messages');
+  if (!messagesFeed) return null;
+
+  let typingEl = document.getElementById('ai-chatbot-typing');
+  if (!typingEl && typeof messagesFeed.querySelector === 'function') {
+    typingEl = messagesFeed.querySelector('#ai-chatbot-typing');
+  }
+  if (typingEl) return typingEl;
+
+  typingEl = document.createElement('div');
+  typingEl.id = 'ai-chatbot-typing';
+  typingEl.classList.add('ai-chatbot-message', 'ai-chatbot-message--bot', 'ai-chatbot-typing-message');
+  typingEl.className = 'ai-chatbot-message ai-chatbot-message--bot ai-chatbot-typing-message';
+  typingEl.setAttribute('aria-label', 'Đang nhập tin nhắn');
+  typingEl.setAttribute('role', 'status');
+
+  const bubbleEl = document.createElement('div');
+  bubbleEl.classList.add('ai-chatbot-message__bubble', 'ai-chatbot-typing');
+  bubbleEl.className = 'ai-chatbot-message__bubble ai-chatbot-typing';
+
+  for (let i = 0; i < 3; i++) {
+    const dot = document.createElement('span');
+    dot.classList.add('ai-chatbot-typing-dot');
+    dot.className = 'ai-chatbot-typing-dot';
+    bubbleEl.appendChild(dot);
+  }
+
+  typingEl.appendChild(bubbleEl);
+  messagesFeed.appendChild(typingEl);
+
+  messagesFeed.scrollTop = messagesFeed.scrollHeight;
+  return typingEl;
+}
+
+/**
+ * Removes the 3-dot typing indicator bubble from the messages feed.
+ *
+ * @param {HTMLElement} [container] - Optional custom message container
+ */
+function hideTypingIndicator(container) {
+  if (typeof document === 'undefined') return;
+
+  const messagesFeed = container || document.getElementById('ai-chatbot-messages');
+  let typingEl = document.getElementById('ai-chatbot-typing');
+  if (!typingEl && messagesFeed && typeof messagesFeed.querySelector === 'function') {
+    typingEl = messagesFeed.querySelector('#ai-chatbot-typing');
+  }
+
+  if (typingEl && typingEl.parentNode && typeof typingEl.parentNode.removeChild === 'function') {
+    typingEl.parentNode.removeChild(typingEl);
+  }
+}
+
+/**
  * Appends a message bubble to the chatbot message feed.
+ * Supports contextual follow-up Quick Reply Chips and mobile in-message view links.
  *
  * @param {string} text - Message text (markdown for bot, plain text for user)
  * @param {'bot'|'user'} [sender='bot'] - Message author
  * @param {HTMLElement} [container] - Optional custom message container element
+ * @param {Object} [options] - Configuration options (suggestions, scrollTo, isMobile)
  * @returns {HTMLElement|null} The created message DOM node
  */
-function appendChatMessage(text, sender = 'bot', container) {
+function appendChatMessage(text, sender = 'bot', container, options = {}) {
   if (typeof document === 'undefined') return null;
 
   const messagesFeed = container || document.getElementById('ai-chatbot-messages');
@@ -263,12 +405,72 @@ function appendChatMessage(text, sender = 'bot', container) {
 
   if (sender === 'bot') {
     bubbleEl.innerHTML = formatMarkdown(text);
+
+    // On mobile devices, bot messages with scroll targets include a clickable link
+    const isMobile = (options && typeof options.isMobile === 'boolean')
+      ? options.isMobile
+      : isMobileDevice();
+
+    if (options && options.scrollTo && isMobile) {
+      const linkWrap = document.createElement('div');
+      linkWrap.classList.add('ai-chatbot-view-link-wrap');
+      linkWrap.className = 'ai-chatbot-view-link-wrap';
+
+      const viewLink = document.createElement('a');
+      viewLink.href = options.scrollTo;
+      viewLink.setAttribute('href', options.scrollTo);
+      viewLink.classList.add('ai-chatbot-view-link');
+      viewLink.className = 'ai-chatbot-view-link';
+      viewLink.textContent = '👉 Xem trên trang';
+      viewLink.setAttribute('role', 'button');
+      viewLink.setAttribute('aria-label', `Xem phần ${options.scrollTo} trên trang`);
+
+      viewLink.addEventListener('click', (e) => {
+        if (e && typeof e.preventDefault === 'function') {
+          e.preventDefault();
+        }
+        closeChat();
+        scrollToTarget(options.scrollTo);
+      });
+
+      linkWrap.appendChild(viewLink);
+      bubbleEl.appendChild(linkWrap);
+    }
   } else {
     // Sanitize user text by setting textContent
     bubbleEl.textContent = text;
   }
 
   messageEl.appendChild(bubbleEl);
+
+  // Append contextual or initial Quick Reply Chips below bot answers
+  if (sender === 'bot' && options && Array.isArray(options.suggestions) && options.suggestions.length > 0) {
+    const chipsContainer = document.createElement('div');
+    chipsContainer.classList.add('ai-chatbot-chips');
+    chipsContainer.className = 'ai-chatbot-chips';
+    chipsContainer.setAttribute('role', 'group');
+    chipsContainer.setAttribute('aria-label', 'Gợi ý câu hỏi nhanh');
+
+    options.suggestions.forEach(suggestionText => {
+      const chipBtn = document.createElement('button');
+      chipBtn.type = 'button';
+      chipBtn.classList.add('ai-chatbot-chip');
+      chipBtn.className = 'ai-chatbot-chip';
+      chipBtn.textContent = suggestionText;
+      chipBtn.setAttribute('data-query', suggestionText);
+
+      chipBtn.addEventListener('click', () => {
+        if (!isBotTyping) {
+          handleUserMessage(suggestionText);
+        }
+      });
+
+      chipsContainer.appendChild(chipBtn);
+    });
+
+    messageEl.appendChild(chipsContainer);
+  }
+
   messagesFeed.appendChild(messageEl);
 
   // Auto-scroll to bottom of message feed
@@ -278,9 +480,210 @@ function appendChatMessage(text, sender = 'bot', container) {
 }
 
 /**
+ * Renders initial greeting message with initial Quick Reply Chips.
+ *
+ * @param {HTMLElement} [container] - Optional custom message container
+ * @returns {HTMLElement|null} The created greeting message element
+ */
+function renderGreeting(container) {
+  if (typeof document === 'undefined') return null;
+
+  const messagesFeed = container || document.getElementById('ai-chatbot-messages');
+  if (!messagesFeed) return null;
+
+  hasGreeted = true;
+  const greetingIntent = CHATBOT_KNOWLEDGE_BASE.greeting;
+
+  return appendChatMessage(
+    greetingIntent.response,
+    'bot',
+    messagesFeed,
+    {
+      suggestions: greetingIntent.suggestions,
+      scrollTo: greetingIntent.scrollTo
+    }
+  );
+}
+
+/**
+ * Handles full conversational user message dispatch:
+ * 1. Appends user message bubble and auto-scrolls feed
+ * 2. Displays 3-dot typing indicator
+ * 3. Waits 400ms-600ms typing delay to simulate natural interaction
+ * 4. Hides typing indicator and matches intent
+ * 5. Appends formatted bot reply with contextual Quick Reply Chips
+ * 6. Smoothly scrolls to section (desktop) or attaches in-message view link (mobile)
+ *
+ * @param {string} rawQuery - Question text
+ * @param {Object} [options] - Optional settings (container, delay, isMobile)
+ * @returns {Promise<Object|null>}
+ */
+function handleUserMessage(rawQuery, options = {}) {
+  if (typeof document === 'undefined') return Promise.resolve(null);
+  if (isBotTyping) return Promise.resolve(null);
+
+  const query = typeof rawQuery === 'string' ? rawQuery.trim() : '';
+  if (!query) return Promise.resolve(null);
+
+  const messagesFeed = (options && options.container) || document.getElementById('ai-chatbot-messages');
+  const inputField = document.getElementById('ai-chatbot-input');
+  const sendBtn = document.getElementById('ai-chatbot-send');
+  if (inputField) {
+    inputField.value = '';
+  }
+  if (sendBtn) {
+    sendBtn.disabled = true;
+  }
+
+  // 1. Append user message bubble & scroll
+  appendChatMessage(query, 'user', messagesFeed);
+
+  // 2. Set typing state & show typing indicator
+  isBotTyping = true;
+  showTypingIndicator(messagesFeed);
+
+  const minDelay = 400;
+  const maxDelay = 600;
+  const delay = (options && typeof options.delay === 'number')
+    ? options.delay
+    : Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      // 3. Remove typing indicator
+      hideTypingIndicator(messagesFeed);
+      isBotTyping = false;
+      if (sendBtn) {
+        sendBtn.disabled = false;
+      }
+
+      // 4. Match intent
+      const matchedIntent = matchIntent(query);
+
+      // 5. Append bot response with chips and mobile link
+      const isMobile = (options && typeof options.isMobile === 'boolean')
+        ? options.isMobile
+        : isMobileDevice();
+
+      const botMessageEl = appendChatMessage(
+        matchedIntent.response,
+        'bot',
+        messagesFeed,
+        {
+          suggestions: matchedIntent.suggestions,
+          scrollTo: matchedIntent.scrollTo,
+          isMobile
+        }
+      );
+
+      // 6. Smooth scroll on desktop
+      if (matchedIntent.scrollTo && !isMobile) {
+        scrollToTarget(matchedIntent.scrollTo);
+      }
+
+      // Re-focus input if on desktop
+      if (inputField && typeof inputField.focus === 'function' && !isMobile) {
+        inputField.focus();
+      }
+
+      resolve({
+        intent: matchedIntent,
+        messageElement: botMessageEl
+      });
+    }, delay);
+  });
+}
+
+/**
+ * Opens the chat window, updates toggle aria attributes,
+ * and renders greeting message if opening for the first time.
+ */
+function openChat() {
+  if (typeof document === 'undefined') return;
+
+  const toggleBtn = document.getElementById('ai-chatbot-toggle');
+  const chatWindow = document.getElementById('ai-chatbot-window');
+
+  if (toggleBtn) {
+    if (typeof toggleBtn.setAttribute === 'function') {
+      toggleBtn.setAttribute('aria-expanded', 'true');
+      toggleBtn.setAttribute('aria-label', 'Đóng trợ lý ảo Công Hậu');
+    }
+    if (toggleBtn.classList) {
+      if (typeof toggleBtn.classList.add === 'function') {
+        toggleBtn.classList.add('active');
+      } else if (typeof toggleBtn.classList.toggle === 'function') {
+        toggleBtn.classList.toggle('active', true);
+      }
+    }
+  }
+
+  if (chatWindow) {
+    if (chatWindow.classList) {
+      if (typeof chatWindow.classList.add === 'function') {
+        chatWindow.classList.add('active');
+      } else if (typeof chatWindow.classList.toggle === 'function') {
+        chatWindow.classList.toggle('active', true);
+      }
+    }
+    if (typeof chatWindow.setAttribute === 'function') {
+      chatWindow.setAttribute('aria-hidden', 'false');
+    }
+  }
+
+  // First-time opening renders initial greeting accompanied by initial Quick Reply Chips
+  if (!hasGreeted) {
+    renderGreeting();
+  }
+
+  const inputField = document.getElementById('ai-chatbot-input');
+  if (inputField && typeof inputField.focus === 'function') {
+    setTimeout(() => inputField.focus(), 150);
+  }
+}
+
+/**
+ * Closes the chat window and resets toggle aria attributes.
+ */
+function closeChat() {
+  if (typeof document === 'undefined') return;
+
+  const toggleBtn = document.getElementById('ai-chatbot-toggle');
+  const chatWindow = document.getElementById('ai-chatbot-window');
+
+  if (chatWindow) {
+    if (chatWindow.classList) {
+      if (typeof chatWindow.classList.remove === 'function') {
+        chatWindow.classList.remove('active');
+      } else if (typeof chatWindow.classList.toggle === 'function') {
+        chatWindow.classList.toggle('active', false);
+      }
+    }
+    if (typeof chatWindow.setAttribute === 'function') {
+      chatWindow.setAttribute('aria-hidden', 'true');
+    }
+  }
+
+  if (toggleBtn) {
+    if (toggleBtn.classList) {
+      if (typeof toggleBtn.classList.remove === 'function') {
+        toggleBtn.classList.remove('active');
+      } else if (typeof toggleBtn.classList.toggle === 'function') {
+        toggleBtn.classList.toggle('active', false);
+      }
+    }
+    if (typeof toggleBtn.setAttribute === 'function') {
+      toggleBtn.setAttribute('aria-expanded', 'false');
+      toggleBtn.setAttribute('aria-label', 'Mở trợ lý ảo Công Hậu');
+    }
+    if (typeof toggleBtn.focus === 'function') {
+      toggleBtn.focus();
+    }
+  }
+}
+
+/**
  * Initializes the floating action button toggle behavior.
- * Handles opening/closing state, accessible labels (aria-label & aria-expanded),
- * and syncs with the chat window if present.
  */
 function initChatbotToggle() {
   if (typeof document === 'undefined') return;
@@ -290,23 +693,10 @@ function initChatbotToggle() {
 
   toggleBtn.addEventListener('click', () => {
     const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
-    const nextState = !isExpanded;
-    toggleBtn.setAttribute('aria-expanded', String(nextState));
-    toggleBtn.setAttribute('aria-label', nextState ? 'Đóng trợ lý ảo Công Hậu' : 'Mở trợ lý ảo Công Hậu');
-    toggleBtn.classList.toggle('active', nextState);
-
-    const chatWindow = document.getElementById('ai-chatbot-window');
-    if (chatWindow) {
-      chatWindow.classList.toggle('active', nextState);
-      if (typeof chatWindow.setAttribute === 'function') {
-        chatWindow.setAttribute('aria-hidden', String(!nextState));
-      }
-      if (nextState) {
-        const inputField = document.getElementById('ai-chatbot-input');
-        if (inputField && typeof inputField.focus === 'function') {
-          setTimeout(() => inputField.focus(), 150);
-        }
-      }
+    if (isExpanded) {
+      closeChat();
+    } else {
+      openChat();
     }
   });
 }
@@ -320,32 +710,10 @@ function initChatbotToggle() {
 function initChatbotWindow() {
   if (typeof document === 'undefined') return;
 
-  const chatWindow = document.getElementById('ai-chatbot-window');
-  const toggleBtn = document.getElementById('ai-chatbot-toggle');
   const closeBtn = document.getElementById('ai-chatbot-close');
   const inputField = document.getElementById('ai-chatbot-input');
   const sendBtn = document.getElementById('ai-chatbot-send');
   const chatForm = document.getElementById('ai-chatbot-form');
-  const messagesFeed = document.getElementById('ai-chatbot-messages');
-
-  function closeChat() {
-    if (chatWindow) {
-      chatWindow.classList.remove('active');
-      if (typeof chatWindow.setAttribute === 'function') {
-        chatWindow.setAttribute('aria-hidden', 'true');
-      }
-    }
-    if (toggleBtn) {
-      toggleBtn.classList.remove('active');
-      if (typeof toggleBtn.setAttribute === 'function') {
-        toggleBtn.setAttribute('aria-expanded', 'false');
-        toggleBtn.setAttribute('aria-label', 'Mở trợ lý ảo Công Hậu');
-      }
-      if (typeof toggleBtn.focus === 'function') {
-        toggleBtn.focus();
-      }
-    }
-  }
 
   if (closeBtn) {
     closeBtn.addEventListener('click', closeChat);
@@ -355,16 +723,16 @@ function initChatbotWindow() {
     if (e && typeof e.preventDefault === 'function') {
       e.preventDefault();
     }
-    if (!inputField) return;
+    if (!inputField || isBotTyping) return;
 
     const query = inputField.value ? inputField.value.trim() : '';
     if (!query) return;
 
-    // Clear input field
+    // Clear input field immediately
     inputField.value = '';
 
-    // Append user message
-    appendChatMessage(query, 'user', messagesFeed);
+    // Dispatch full conversational message handling
+    handleUserMessage(query);
 
     if (typeof inputField.focus === 'function') {
       inputField.focus();
@@ -379,7 +747,6 @@ function initChatbotWindow() {
     sendBtn.addEventListener('click', handleMessageSubmit);
   }
 
-  // Also support Enter key directly on input if not inside form
   if (inputField && !chatForm) {
     inputField.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
@@ -415,6 +782,15 @@ if (typeof module !== 'undefined' && module.exports) {
     matchIntent,
     formatMarkdown,
     appendChatMessage,
+    showTypingIndicator,
+    hideTypingIndicator,
+    renderGreeting,
+    handleUserMessage,
+    openChat,
+    closeChat,
+    scrollToTarget,
+    isMobileDevice,
+    resetChatState,
     initChatbotToggle,
     initChatbotWindow,
     initChatbot
@@ -428,6 +804,15 @@ if (typeof window !== 'undefined') {
   window.matchIntent = matchIntent;
   window.formatMarkdown = formatMarkdown;
   window.appendChatMessage = appendChatMessage;
+  window.showTypingIndicator = showTypingIndicator;
+  window.hideTypingIndicator = hideTypingIndicator;
+  window.renderGreeting = renderGreeting;
+  window.handleUserMessage = handleUserMessage;
+  window.openChat = openChat;
+  window.closeChat = closeChat;
+  window.scrollToTarget = scrollToTarget;
+  window.isMobileDevice = isMobileDevice;
+  window.resetChatState = resetChatState;
   window.initChatbotToggle = initChatbotToggle;
   window.initChatbotWindow = initChatbotWindow;
   window.initChatbot = initChatbot;
