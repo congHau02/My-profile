@@ -94,6 +94,35 @@ describe('CHATBOT_KNOWLEDGE_BASE', () => {
     assert.ok(myprofile, 'project_myprofile must exist');
     assert.ok(myprofile.response.includes('https://github.com/congHau02/My-profile'));
   });
+
+  it('maintains strict profile facts and anchor integrity with index.html', () => {
+    const fs = require('node:fs');
+    const path = require('node:path');
+    const indexHtml = fs.readFileSync(path.join(__dirname, '../index.html'), 'utf8');
+
+    // Reconciled GPA fact check
+    assert.ok(
+      indexHtml.includes('GPA > 3.1 / 4.0'),
+      'index.html must accurately reflect GPA > 3.1 / 4.0 matching CHATBOT_KNOWLEDGE_BASE'
+    );
+    assert.doesNotMatch(
+      indexHtml,
+      /GPA\s*>\s*3\.0/i,
+      'index.html must not contain outdated GPA > 3.0'
+    );
+
+    // Every non-null scrollTo target in knowledge base must resolve to an element id in index.html
+    for (const intent of Object.values(CHATBOT_KNOWLEDGE_BASE)) {
+      if (intent.scrollTo) {
+        const targetId = intent.scrollTo.replace(/^#/, '');
+        const idRegex = new RegExp(`id=["']${targetId}["']`, 'i');
+        assert.ok(
+          idRegex.test(indexHtml),
+          `scrollTo target "${intent.scrollTo}" in intent "${intent.id}" must exist as an id in index.html`
+        );
+      }
+    }
+  });
 });
 
 describe('scoreIntent', () => {

@@ -866,11 +866,29 @@ function initChatbotWindow() {
 }
 
 /**
- * Main initialization entrypoint.
+ * Main initialization entrypoint and deep module interface.
+ * Wires up widget toggle, window controls, and returns a controller interface.
+ *
+ * @param {Object} [options] - Configuration overrides
+ * @param {Document} [options.document] - Document interface (defaults to global document)
+ * @param {Window} [options.window] - Window interface (defaults to global window)
+ * @param {number} [options.typingDelayMs] - Custom typing delay for simulated typing
+ * @returns {{ openChat: Function, closeChat: Function, reset: Function, destroy: Function, handleUserMessage: Function }}
  */
-function initChatbot() {
+function initChatbot(options = {}) {
+  const doc = (options && options.document) || (typeof document !== 'undefined' ? document : null);
+  const win = (options && options.window) || (typeof window !== 'undefined' ? window : null);
+
   initChatbotToggle();
   initChatbotWindow();
+
+  return {
+    openChat: () => openChat(),
+    closeChat: () => closeChat(),
+    reset: () => resetChatState(),
+    destroy: () => resetChatState(),
+    handleUserMessage: (query, opts) => handleUserMessage(query, Object.assign({}, options, opts))
+  };
 }
 
 // Auto-initialize when running in a browser environment

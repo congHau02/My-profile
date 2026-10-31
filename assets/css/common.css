@@ -9,6 +9,16 @@
     --sub-heading-color: #C6C7CA;
     --background-color-btn: #212121;
     --footer-color: #1C1D1E;
+
+    /* Floating UI Stacking & Coordinate Tokens */
+    --z-bird-companion: 900;
+    --z-on-top: 998;
+    --z-chatbot-toggle: 999;
+    --z-chatbot-window: 1000;
+    --floating-right-desktop: 24px;
+    --floating-bottom-toggle: 24px;
+    --floating-bottom-window: 88px;
+    --floating-bottom-ontop: 88px;
 }
 html.light {
     --header-color: #f6f7f9;

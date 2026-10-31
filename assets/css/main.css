@@ -112,7 +112,7 @@
     left: 0;
     width: 140px;
     height: 130px;
-    z-index: 9999;
+    z-index: var(--z-bird-companion, 900);
     pointer-events: auto;
     cursor: pointer;
     will-change: transform;
@@ -242,7 +242,7 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     pointer-events: none;
     white-space: nowrap;
-    z-index: 10001;
+    z-index: calc(var(--z-bird-companion, 900) + 2);
     opacity: 0;
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
 }
@@ -279,7 +279,7 @@ html:not(.light) .bird-speech-bubble::after {
     width: 12px;
     height: 22px;
     pointer-events: none;
-    z-index: 10000;
+    z-index: calc(var(--z-bird-companion, 900) + 1);
     border-radius: 50% 50% 50% 50% / 80% 80% 20% 20%;
     opacity: 0.95;
     will-change: transform, opacity;
