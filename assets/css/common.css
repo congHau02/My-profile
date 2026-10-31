@@ -440,6 +440,17 @@ html.light .btn-github:hover {
                 box-shadow 0.3s ease;
 }
 
+/* Chatbot Typography Standardization */
+.ai-chatbot-window input,
+.ai-chatbot-window textarea {
+    font-family: "Sora", sans-serif;
+}
+
+.ai-chatbot-window button,
+.ai-chatbot-toggle {
+    font-family: "Sora", sans-serif;
+}
+
 .ai-chatbot-window.active {
     opacity: 1;
     visibility: visible;
@@ -784,13 +795,14 @@ html.light .btn-github:hover {
     background: transparent;
     color: #ffffff;
     font-size: 1.35rem;
-    font-family: inherit;
+    font-family: "Sora", sans-serif;
     padding: 6px 0;
 }
 
 .ai-chatbot-window__input::placeholder {
     color: var(--sub-heading-color, #C6C7CA);
     opacity: 0.7;
+    font-family: "Sora", sans-serif;
 }
 
 .ai-chatbot-window__send-btn {

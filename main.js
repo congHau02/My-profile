@@ -391,18 +391,40 @@ checkScreenSize();  // Kiểm tra ngay khi trang được tải
 
 window.addEventListener('resize', checkScreenSize); // Kiểm tra mỗi khi cửa sổ được thay đổi kích thước
 
-// Chặn Kiểm tra trình duyệt
-document.addEventListener('contextmenu', function(event) { // Click chuột phải
+// Chặn Kiểm tra trình duyệt (cho phép chuột phải và gõ phím bình thường trong ô nhập liệu)
+document.addEventListener('contextmenu', function(event) {
+    const target = event.target;
+    if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) {
+        return; // Cho phép chuột phải trong ô nhập liệu để paste / copy
+    }
     event.preventDefault();     
 });
+
 window.addEventListener('keydown', function(event) {
-    if (event.keyCode === 123 ||
-        event.keyCode === 85 ||
-        event.keyCode === 73 ||
-        event.keyCode === 74 ||
-        event.keyCode === 67) 
-    { // F12 U I J C
+    const target = event.target;
+    // Bỏ qua nếu người dùng đang nhập văn bản trong input, textarea hoặc contentEditable
+    if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) {
+        return;
+    }
+
+    const isCtrlOrCmd = event.ctrlKey || event.metaKey;
+
+    // F12 (123)
+    if (event.keyCode === 123) {
         event.preventDefault();
+        return;
+    }
+
+    // Ctrl+Shift+I (73), Ctrl+Shift+J (74), Ctrl+Shift+C (67)
+    if (isCtrlOrCmd && event.shiftKey && (event.keyCode === 73 || event.keyCode === 74 || event.keyCode === 67)) {
+        event.preventDefault();
+        return;
+    }
+
+    // Ctrl+U (85) - Xem mã nguồn trang
+    if (isCtrlOrCmd && !event.shiftKey && event.keyCode === 85) {
+        event.preventDefault();
+        return;
     }
 });
 

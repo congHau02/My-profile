@@ -789,6 +789,9 @@ function initChatbotWindow() {
       isComposing = false;
     });
     inputField.addEventListener('keydown', (e) => {
+      if (typeof e.stopPropagation === 'function') {
+        e.stopPropagation();
+      }
       if (e.isComposing || e.keyCode === 229 || isComposing) {
         return;
       }
