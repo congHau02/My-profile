@@ -6,6 +6,7 @@ const {
   formatMarkdown,
   initChatbotWindow,
   initChatbotToggle,
+  handleDocumentClick,
   CHATBOT_KNOWLEDGE_BASE
 } = require('../chatbot.js');
 
@@ -102,6 +103,12 @@ describe('03: Chat Window UI, Sora Theme Integration and Micro-Markdown Formatte
       assert.match(html, /<footer[^>]*class=["'][^"']*ai-chatbot-window__footer[^"']*["']/i, 'Must contain footer element');
       assert.match(html, /id=["']ai-chatbot-input["']/i, 'Footer must contain input #ai-chatbot-input');
       assert.match(html, /id=["']ai-chatbot-send["']/i, 'Footer must contain send button #ai-chatbot-send');
+    });
+
+    it('index.html has section#info.info and does not have id=info on decorative knot image', () => {
+      const html = fs.readFileSync(indexHtmlPath, 'utf8');
+      assert.match(html, /<section[^>]*id=["']info["'][^>]*class=["'][^"']*info[^"']*["']/i, 'Must have <section id="info" class="info">');
+      assert.doesNotMatch(html, /<img[^>]*id=["']info["']/i, 'Knot image must not have id="info"');
     });
   });
 
@@ -312,6 +319,121 @@ describe('03: Chat Window UI, Sora Theme Integration and Micro-Markdown Formatte
 
         // Input value should be cleared
         assert.strictEqual(mockInput.value, '', 'Input field must be cleared after submission');
+      } finally {
+        global.document = globalDoc;
+      }
+    });
+
+    it('prevents premature submission during Vietnamese IME composition (isComposing or keyCode 229)', () => {
+      const listeners = {};
+
+      const mockInput = {
+        value: 'tiến',
+        focus: () => {},
+        addEventListener: (event, handler) => {
+          listeners['input:' + event] = handler;
+        }
+      };
+
+      const mockForm = {
+        addEventListener: (event, handler) => {
+          listeners['form:' + event] = handler;
+        }
+      };
+
+      const globalDoc = global.document;
+      global.document = {
+        getElementById: (id) => {
+          if (id === 'ai-chatbot-input') return mockInput;
+          if (id === 'ai-chatbot-form') return mockForm;
+          if (id === 'ai-chatbot-window') return { classList: { contains: () => true } };
+          if (id === 'ai-chatbot-toggle') return { classList: { toggle: () => {} }, setAttribute: () => {}, getAttribute: () => 'false' };
+          if (id === 'ai-chatbot-close') return { addEventListener: () => {} };
+          return null;
+        },
+        addEventListener: () => {}
+      };
+
+      try {
+        initChatbotWindow();
+
+        // 1. Simulating Enter keydown while isComposing = true
+        let prevented = false;
+        listeners['input:keydown']({
+          key: 'Enter',
+          isComposing: true,
+          preventDefault: () => { prevented = true; }
+        });
+        // Input should not be submitted or cleared
+        assert.strictEqual(mockInput.value, 'tiến', 'Input value must not be cleared during IME composition');
+
+        // 2. Simulating Enter keydown while keyCode === 229 (IME processing code)
+        listeners['input:keydown']({
+          key: 'Enter',
+          keyCode: 229,
+          preventDefault: () => { prevented = true; }
+        });
+        assert.strictEqual(mockInput.value, 'tiến', 'Input value must not be cleared during keyCode 229');
+
+        // 3. Simulating compositionstart -> submit -> compositionend
+        if (listeners['input:compositionstart']) {
+          listeners['input:compositionstart']();
+          listeners['form:submit']({ preventDefault: () => {} });
+          assert.strictEqual(mockInput.value, 'tiến', 'Form submit must be blocked while composition is active');
+          listeners['input:compositionend']();
+        }
+      } finally {
+        global.document = globalDoc;
+      }
+    });
+
+    it('closes chat window when clicking outside of window and toggle button', () => {
+      let closed = false;
+      const mockToggle = {
+        classList: {
+          contains: () => false,
+          remove: () => {},
+          toggle: () => {}
+        },
+        setAttribute: () => {},
+        focus: () => {},
+        contains: (target) => target === mockToggle
+      };
+
+      const mockWindow = {
+        classList: {
+          contains: (cls) => cls === 'active' && !closed,
+          remove: (cls) => { if (cls === 'active') closed = true; },
+          toggle: (cls, state) => { if (cls === 'active' && !state) closed = true; }
+        },
+        setAttribute: () => {},
+        contains: (target) => target === mockWindow || target === mockInside
+      };
+
+      const mockInside = {};
+      const mockOutside = {};
+
+      const globalDoc = global.document;
+      global.document = {
+        getElementById: (id) => {
+          if (id === 'ai-chatbot-window') return mockWindow;
+          if (id === 'ai-chatbot-toggle') return mockToggle;
+          return null;
+        }
+      };
+
+      try {
+        // 1. Click inside window - chat should remain open
+        handleDocumentClick({ target: mockInside });
+        assert.strictEqual(closed, false, 'Clicking inside the chat window must not close it');
+
+        // 2. Click on toggle button - chat should remain open (handled by toggle itself)
+        handleDocumentClick({ target: mockToggle });
+        assert.strictEqual(closed, false, 'Clicking the toggle button must not trigger click-outside close');
+
+        // 3. Click outside - chat should close
+        handleDocumentClick({ target: mockOutside });
+        assert.strictEqual(closed, true, 'Clicking outside must close the chat window');
       } finally {
         global.document = globalDoc;
       }

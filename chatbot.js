@@ -21,7 +21,8 @@ const CHATBOT_KNOWLEDGE_BASE = {
   skills: {
     id: 'skills',
     patterns: [
-      'ky nang', 'skills', 'skill', 'cong nghe', 'tech stack', 'stack',
+      'ky nang', 'ki nang', 'ky nang cong nghe', 'ki nang cong nghe',
+      'skills', 'skill', 'cong nghe', 'tech stack', 'stack',
       'frontend', 'backend', 'fullstack', 'cloud', 'devops', 'aws', 'docker',
       'terraform', 'java', 'spring', 'spring boot', 'react', 'reactjs',
       'tailwindcss', 'supabase', 'mysql', 'co so du lieu', 'database',
@@ -40,7 +41,7 @@ const CHATBOT_KNOWLEDGE_BASE = {
       'du an react', 'du an tieu bieu', 'cac du an', 'kho ma nguon'
     ],
     response: 'Dưới đây là **4 dự án mã nguồn mở tiêu biểu** trên GitHub của Nguyễn Công Hậu:\n\n• **[SmartSalon](https://github.com/congHau02/SmartSalon)**: Hệ thống quản lý salon và đặt lịch hẹn thông minh với kiến trúc Full-Stack hiện đại.\n• **[The-Booking-Site](https://github.com/congHau02/The-Booking-Site)**: Nền tảng đặt phòng trực tuyến tối ưu trải nghiệm người dùng và luồng đặt chỗ.\n• **[POS_QUAN_LY_BAN_HANG](https://github.com/congHau02/POS_QUAN_LY_BAN_HANG)**: Hệ thống quản lý bán hàng tại điểm bán (Point of Sale) hoàn chỉnh (quản lý sản phẩm, đơn hàng, hóa đơn).\n• **[My-profile](https://github.com/congHau02/My-profile)**: Portfolio cá nhân tương tác cao, mã nguồn mở triển khai CI/CD trên GitHub Pages.',
-    scrollTo: '#skills',
+    scrollTo: null,
     suggestions: ['Kỹ năng công nghệ', 'Học vấn & Kinh nghiệm', 'Thông tin liên hệ']
   },
   about: {
@@ -67,8 +68,9 @@ const CHATBOT_KNOWLEDGE_BASE = {
   contact: {
     id: 'contact',
     patterns: [
-      'lien he', 'contact', 'email', 'so dien thoai', 'facebook', 'instagram',
-      'github', 'trao doi', 'ket noi', 'social', 'phone', 'nhan tin'
+      'thong tin lien he', 'thong tin lien lac', 'lien he', 'contact', 'email',
+      'so dien thoai', 'facebook', 'instagram', 'github', 'trao doi', 'ket noi',
+      'social', 'phone', 'nhan tin'
     ],
     response: 'Bạn có thể liên hệ và kết nối với **Nguyễn Công Hậu** qua các kênh:\n\n• **GitHub**: [github.com/congHau02](https://github.com/congHau02)\n• **Facebook**: [Nguyễn Công Hậu](https://www.facebook.com/yangqi.28)\n• **Instagram**: [@cong.hau05](https://www.instagram.com/cong.hau05/)',
     scrollTo: '#info',
@@ -100,6 +102,7 @@ function normalizeText(text) {
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[đĐ]/g, 'd')
+    .replace(/dd/g, 'd')
     .replace(/[^\w\s]|_/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
@@ -247,6 +250,34 @@ function formatMarkdown(text) {
  */
 let hasGreeted = false;
 let isBotTyping = false;
+let hasDocumentClickListener = false;
+
+/**
+ * Handles document clicks to dismiss the chat window when clicking outside.
+ *
+ * @param {MouseEvent|Object} e - Click event
+ */
+function handleDocumentClick(e) {
+  if (typeof document === 'undefined') return;
+  const chatWindow = document.getElementById('ai-chatbot-window');
+  const toggleBtn = document.getElementById('ai-chatbot-toggle');
+
+  if (!chatWindow) return;
+  const isActive = chatWindow.classList && typeof chatWindow.classList.contains === 'function'
+    ? chatWindow.classList.contains('active')
+    : false;
+  if (!isActive) return;
+
+  const target = e && e.target;
+  if (!target) return;
+
+  const isInsideWindow = chatWindow === target || (typeof chatWindow.contains === 'function' && chatWindow.contains(target));
+  const isInsideToggle = toggleBtn && (toggleBtn === target || (typeof toggleBtn.contains === 'function' && toggleBtn.contains(target)));
+
+  if (!isInsideWindow && !isInsideToggle) {
+    closeChat();
+  }
+}
 
 /**
  * Resets ephemeral conversation state.
@@ -264,7 +295,11 @@ function resetChatState() {
         messagesFeed.children.length = 0;
       }
     }
+    if (typeof document.removeEventListener === 'function' && hasDocumentClickListener) {
+      document.removeEventListener('click', handleDocumentClick);
+    }
   }
+  hasDocumentClickListener = false;
 }
 
 /**
@@ -340,18 +375,15 @@ function showTypingIndicator(container) {
   typingEl = document.createElement('div');
   typingEl.id = 'ai-chatbot-typing';
   typingEl.classList.add('ai-chatbot-message', 'ai-chatbot-message--bot', 'ai-chatbot-typing-message');
-  typingEl.className = 'ai-chatbot-message ai-chatbot-message--bot ai-chatbot-typing-message';
   typingEl.setAttribute('aria-label', 'Đang nhập tin nhắn');
   typingEl.setAttribute('role', 'status');
 
   const bubbleEl = document.createElement('div');
   bubbleEl.classList.add('ai-chatbot-message__bubble', 'ai-chatbot-typing');
-  bubbleEl.className = 'ai-chatbot-message__bubble ai-chatbot-typing';
 
   for (let i = 0; i < 3; i++) {
     const dot = document.createElement('span');
     dot.classList.add('ai-chatbot-typing-dot');
-    dot.className = 'ai-chatbot-typing-dot';
     bubbleEl.appendChild(dot);
   }
 
@@ -414,13 +446,11 @@ function appendChatMessage(text, sender = 'bot', container, options = {}) {
     if (options && options.scrollTo && isMobile) {
       const linkWrap = document.createElement('div');
       linkWrap.classList.add('ai-chatbot-view-link-wrap');
-      linkWrap.className = 'ai-chatbot-view-link-wrap';
 
       const viewLink = document.createElement('a');
       viewLink.href = options.scrollTo;
       viewLink.setAttribute('href', options.scrollTo);
       viewLink.classList.add('ai-chatbot-view-link');
-      viewLink.className = 'ai-chatbot-view-link';
       viewLink.textContent = '👉 Xem trên trang';
       viewLink.setAttribute('role', 'button');
       viewLink.setAttribute('aria-label', `Xem phần ${options.scrollTo} trên trang`);
@@ -447,7 +477,6 @@ function appendChatMessage(text, sender = 'bot', container, options = {}) {
   if (sender === 'bot' && options && Array.isArray(options.suggestions) && options.suggestions.length > 0) {
     const chipsContainer = document.createElement('div');
     chipsContainer.classList.add('ai-chatbot-chips');
-    chipsContainer.className = 'ai-chatbot-chips';
     chipsContainer.setAttribute('role', 'group');
     chipsContainer.setAttribute('aria-label', 'Gợi ý câu hỏi nhanh');
 
@@ -455,7 +484,6 @@ function appendChatMessage(text, sender = 'bot', container, options = {}) {
       const chipBtn = document.createElement('button');
       chipBtn.type = 'button';
       chipBtn.classList.add('ai-chatbot-chip');
-      chipBtn.className = 'ai-chatbot-chip';
       chipBtn.textContent = suggestionText;
       chipBtn.setAttribute('data-query', suggestionText);
 
@@ -705,6 +733,8 @@ function initChatbotToggle() {
  * Initializes the chat window interface:
  * - Wire up close button to dismiss the window and sync FAB toggle
  * - Wire up form submit & input Enter key / Send button click
+ * - Handle Vietnamese IME composition (Telex/VNI) to prevent premature submission
+ * - Wire up click outside to dismiss the chat window
  * - Auto-scrolls and manages focus for accessibility
  */
 function initChatbotWindow() {
@@ -719,9 +749,21 @@ function initChatbotWindow() {
     closeBtn.addEventListener('click', closeChat);
   }
 
+  // Click outside to close
+  if (typeof document.addEventListener === 'function' && !hasDocumentClickListener) {
+    document.addEventListener('click', handleDocumentClick);
+    hasDocumentClickListener = true;
+  }
+
+  let isComposing = false;
+
   function handleMessageSubmit(e) {
     if (e && typeof e.preventDefault === 'function') {
       e.preventDefault();
+    }
+    // Prevent premature submit during IME composition (Vietnamese Telex/VNI)
+    if (isComposing || (e && (e.isComposing || e.keyCode === 229))) {
+      return;
     }
     if (!inputField || isBotTyping) return;
 
@@ -739,20 +781,30 @@ function initChatbotWindow() {
     }
   }
 
+  if (inputField) {
+    inputField.addEventListener('compositionstart', () => {
+      isComposing = true;
+    });
+    inputField.addEventListener('compositionend', () => {
+      isComposing = false;
+    });
+    inputField.addEventListener('keydown', (e) => {
+      if (e.isComposing || e.keyCode === 229 || isComposing) {
+        return;
+      }
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleMessageSubmit(e);
+      }
+    });
+  }
+
   if (chatForm) {
     chatForm.addEventListener('submit', handleMessageSubmit);
   }
 
   if (sendBtn && !chatForm) {
     sendBtn.addEventListener('click', handleMessageSubmit);
-  }
-
-  if (inputField && !chatForm) {
-    inputField.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        handleMessageSubmit(e);
-      }
-    });
   }
 }
 
@@ -788,6 +840,7 @@ if (typeof module !== 'undefined' && module.exports) {
     handleUserMessage,
     openChat,
     closeChat,
+    handleDocumentClick,
     scrollToTarget,
     isMobileDevice,
     resetChatState,
@@ -810,6 +863,7 @@ if (typeof window !== 'undefined') {
   window.handleUserMessage = handleUserMessage;
   window.openChat = openChat;
   window.closeChat = closeChat;
+  window.handleDocumentClick = handleDocumentClick;
   window.scrollToTarget = scrollToTarget;
   window.isMobileDevice = isMobileDevice;
   window.resetChatState = resetChatState;

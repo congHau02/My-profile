@@ -13,6 +13,12 @@ describe('normalizeText', () => {
     assert.strictEqual(normalizeText(null), '');
     assert.strictEqual(normalizeText(undefined), '');
   });
+
+  it('converts unaccented Telex dd into d for typing tolerance', () => {
+    assert.strictEqual(normalizeText('ddai hoc'), 'dai hoc');
+    assert.strictEqual(normalizeText('ddu an'), 'du an');
+    assert.strictEqual(normalizeText('kĩ năng'), 'ki nang');
+  });
 });
 
 describe('CHATBOT_KNOWLEDGE_BASE', () => {
@@ -51,6 +57,7 @@ describe('CHATBOT_KNOWLEDGE_BASE', () => {
     assert.strictEqual(CHATBOT_KNOWLEDGE_BASE.skills.scrollTo, '#skills');
     assert.strictEqual(CHATBOT_KNOWLEDGE_BASE.education.scrollTo, '#education');
     assert.strictEqual(CHATBOT_KNOWLEDGE_BASE.contact.scrollTo, '#info');
+    assert.strictEqual(CHATBOT_KNOWLEDGE_BASE.projects.scrollTo, null);
   });
 });
 
@@ -101,6 +108,20 @@ describe('matchIntent', () => {
     assert.strictEqual(matchIntent('Thông tin liên hệ facebook github').id, 'contact');
     assert.strictEqual(matchIntent('Bạn là ai? Giới thiệu bản thân').id, 'about');
     assert.strictEqual(matchIntent('Hello bot!').id, 'greeting');
+  });
+
+  it('correctly resolves intent collision: thông tin liên hệ matches contact, not about', () => {
+    assert.strictEqual(matchIntent('thông tin liên hệ').id, 'contact');
+    assert.strictEqual(matchIntent('thong tin lien he').id, 'contact');
+    assert.strictEqual(matchIntent('thông tin liên lạc').id, 'contact');
+    assert.strictEqual(matchIntent('thông tin').id, 'about');
+  });
+
+  it('correctly matches spelling variants and unaccented Telex input', () => {
+    assert.strictEqual(matchIntent('kĩ năng').id, 'skills');
+    assert.strictEqual(matchIntent('ki nang').id, 'skills');
+    assert.strictEqual(matchIntent('ddai hoc').id, 'education');
+    assert.strictEqual(matchIntent('ddu an').id, 'projects');
   });
 });
 
