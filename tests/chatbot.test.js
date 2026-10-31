@@ -59,6 +59,41 @@ describe('CHATBOT_KNOWLEDGE_BASE', () => {
     assert.strictEqual(CHATBOT_KNOWLEDGE_BASE.contact.scrollTo, '#info');
     assert.strictEqual(CHATBOT_KNOWLEDGE_BASE.projects.scrollTo, null);
   });
+
+  it('cv intent includes download link and accurate highlights from verified resume', () => {
+    const cvIntent = CHATBOT_KNOWLEDGE_BASE.cv;
+    assert.ok(cvIntent, 'cv intent must exist');
+    assert.strictEqual(cvIntent.id, 'cv');
+    assert.ok(cvIntent.response.includes('./assets/cv/CV-Nguyen-Cong-Hau.pdf'), 'Must link to CV PDF file');
+    assert.ok(cvIntent.response.includes('Fullstack Developer'), 'Must mention Fullstack Developer');
+    assert.ok(cvIntent.response.includes('3.1'), 'Must mention GPA > 3.1');
+    assert.ok(Array.isArray(cvIntent.patterns) && cvIntent.patterns.length > 0);
+    assert.ok(Array.isArray(cvIntent.suggestions) && cvIntent.suggestions.length > 0);
+  });
+
+  it('detailed project intents contain rich technical specs and GitHub links', () => {
+    const smartsalon = CHATBOT_KNOWLEDGE_BASE.project_smartsalon;
+    assert.ok(smartsalon, 'project_smartsalon must exist');
+    assert.ok(smartsalon.response.includes('https://github.com/congHau02/SmartSalon'));
+    assert.ok(smartsalon.response.includes('Redis'));
+    assert.ok(smartsalon.response.includes('WebSocket') || smartsalon.response.includes('STOMP'));
+    assert.ok(smartsalon.response.includes('PayOS'));
+
+    const pos = CHATBOT_KNOWLEDGE_BASE.project_pos;
+    assert.ok(pos, 'project_pos must exist');
+    assert.ok(pos.response.includes('https://github.com/congHau02/POS_QUAN_LY_BAN_HANG'));
+    assert.ok(pos.response.includes('Spring Boot'));
+    assert.ok(pos.response.includes('EC2'));
+    assert.ok(pos.response.includes('PayOS'));
+
+    const booking = CHATBOT_KNOWLEDGE_BASE.project_booking;
+    assert.ok(booking, 'project_booking must exist');
+    assert.ok(booking.response.includes('https://github.com/congHau02/The-Booking-Site'));
+
+    const myprofile = CHATBOT_KNOWLEDGE_BASE.project_myprofile;
+    assert.ok(myprofile, 'project_myprofile must exist');
+    assert.ok(myprofile.response.includes('https://github.com/congHau02/My-profile'));
+  });
 });
 
 describe('scoreIntent', () => {
@@ -95,11 +130,31 @@ describe('matchIntent', () => {
     assert.strictEqual(matchIntent('thời tiết').id, 'fallback');
   });
 
-  it('correctly matches queries for all 4 public github repositories', () => {
-    assert.strictEqual(matchIntent('SmartSalon').id, 'projects');
-    assert.strictEqual(matchIntent('The-Booking-Site').id, 'projects');
-    assert.strictEqual(matchIntent('POS_QUAN_LY_BAN_HANG').id, 'projects');
-    assert.strictEqual(matchIntent('My-profile').id, 'projects');
+  it('correctly matches queries for all 4 public github repositories to their specific project intents', () => {
+    assert.strictEqual(matchIntent('SmartSalon').id, 'project_smartsalon');
+    assert.strictEqual(matchIntent('The-Booking-Site').id, 'project_booking');
+    assert.strictEqual(matchIntent('POS_QUAN_LY_BAN_HANG').id, 'project_pos');
+    assert.strictEqual(matchIntent('My-profile').id, 'project_myprofile');
+  });
+
+  it('correctly matches CV and resume queries to cv intent', () => {
+    assert.strictEqual(matchIntent('xem cv').id, 'cv');
+    assert.strictEqual(matchIntent('cho xem cv').id, 'cv');
+    assert.strictEqual(matchIntent('tải cv').id, 'cv');
+    assert.strictEqual(matchIntent('download resume').id, 'cv');
+    assert.strictEqual(matchIntent('hồ sơ').id, 'cv');
+    assert.strictEqual(matchIntent('cv').id, 'cv');
+    assert.strictEqual(matchIntent('resume').id, 'cv');
+  });
+
+  it('correctly matches specific queries for SmartSalon, POS, and Booking site', () => {
+    assert.strictEqual(matchIntent('dự án smartsalon').id, 'project_smartsalon');
+    assert.strictEqual(matchIntent('đặt lịch salon').id, 'project_smartsalon');
+    assert.strictEqual(matchIntent('hệ thống pos').id, 'project_pos');
+    assert.strictEqual(matchIntent('pos quản lý bán hàng').id, 'project_pos');
+    assert.strictEqual(matchIntent('dự án booking').id, 'project_booking');
+    assert.strictEqual(matchIntent('đặt phòng').id, 'project_booking');
+    assert.strictEqual(matchIntent('portfolio này').id, 'project_myprofile');
   });
 
   it('matches intent variations with punctuation and extra whitespace', () => {

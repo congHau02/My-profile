@@ -14,9 +14,20 @@ const CHATBOT_KNOWLEDGE_BASE = {
       'xin chao', 'chao', 'chao ban', 'hello', 'hi', 'hey', 'alo', 'halo',
       'good morning', 'good afternoon', 'chao em', 'chao anh', 'hi bot', 'chao bot'
     ],
-    response: 'Xin chào! Mình là **Trợ lý ảo của Nguyễn Công Hậu** 👋\n\nMình có thể hỗ trợ bạn tìm hiểu về **kỹ năng công nghệ**, các **dự án nổi bật**, **học vấn** hoặc **thông tin liên hệ** của Hậu. Bạn muốn khám phá phần nào?',
+    response: 'Xin chào! Mình là **Trợ lý ảo của Nguyễn Công Hậu** 👋\n\nMình có thể hỗ trợ bạn **xem CV**, tìm hiểu về **kỹ năng công nghệ**, các **dự án nổi bật**, **học vấn** hoặc **thông tin liên hệ** của Hậu. Bạn muốn khám phá phần nào?',
     scrollTo: null,
-    suggestions: ['Kỹ năng công nghệ', 'Dự án tiêu biểu', 'Thông tin liên hệ']
+    suggestions: ['Kỹ năng công nghệ', 'Dự án tiêu biểu', 'Thông tin liên hệ', 'Xem CV']
+  },
+  cv: {
+    id: 'cv',
+    patterns: [
+      'cv', 'resume', 'xem cv', 'tai cv', 'download cv', 'ho so', 'xin cv', 'file cv',
+      'ban cv', 'pdf cv', 'curriculum vitae', 'xem resume', 'download resume', 'link cv',
+      'cho xem cv', 'cho minh xin cv', 'gui cv', 'cv nguyen cong hau'
+    ],
+    response: 'Dưới đây là thông tin **Curriculum Vitae (CV)** của **Nguyễn Công Hậu**:\n\n• **Vị trí định hướng**: Fullstack Developer (Fresher/Intern) - Trọng tâm **Java Spring Boot & ReactJS**\n• **Học vấn**: Trường Đại học Giao thông Vận tải (UTC) | Ngành Công nghệ thông tin (09/2023 – 09/2027) | **GPA > 3.1 / 4.0**\n• **Thế mạnh chuyên môn**: Thiết kế RESTful API chuẩn Clean Architecture, xử lý đồng thời & chống race condition với **Redis Distributed Lock**, tích hợp cổng thanh toán thực tế **PayOS (VietQR)**, tối ưu cơ sở dữ liệu, đóng gói Docker và thiết lập pipeline **CI/CD** triển khai đám mây AWS.\n• **Dự án thực chiến**: **SmartSalon** (Spring Boot 4, React 19, Redis MSETNX lock, STOMP WebSocket) & **POS Bán Hàng** (CI/CD GitHub Actions, Docker, AWS EC2, S3).\n\n📥 **[Tải / Xem CV đầy đủ (PDF)](./assets/cv/CV-Nguyen-Cong-Hau.pdf)**',
+    scrollTo: null,
+    suggestions: ['SmartSalon', 'Hệ thống POS', 'Kỹ năng công nghệ', 'Thông tin liên hệ']
   },
   skills: {
     id: 'skills',
@@ -26,23 +37,62 @@ const CHATBOT_KNOWLEDGE_BASE = {
       'frontend', 'backend', 'fullstack', 'cloud', 'devops', 'aws', 'docker',
       'terraform', 'java', 'spring', 'spring boot', 'react', 'reactjs',
       'tailwindcss', 'supabase', 'mysql', 'co so du lieu', 'database',
-      'ci cd', 'pipeline', 'kien truc', 'rest api', 'api', 'ecs', 'ecr'
+      'ci cd', 'pipeline', 'kien truc', 'rest api', 'api', 'ecs', 'ecr',
+      'redis', 'distributed lock', 'websocket', 'stomp', 'payos', 'tanstack query',
+      'virtual threads', 'flyway', 'postman', 'ec2'
     ],
-    response: 'Kỹ năng chuyên môn của **Nguyễn Công Hậu** bao gồm:\n\n• **Frontend**: React, JavaScript (ES6+), HTML5, CSS3, Tailwind CSS\n• **Backend**: Java, Spring Boot, Node.js, RESTful APIs, MySQL, Supabase\n• **Cloud & DevOps**: AWS (ECR, ECS Fargate, S3), Docker, Terraform (IaC), GitHub Actions CI/CD với OIDC Auth\n• **Khác**: AI Agents, tư duy thiết kế hệ thống phân tán & triển khai tự động hóa.',
+    response: 'Kỹ năng chuyên môn của **Nguyễn Công Hậu**:\n\n• **Backend**: Java (Spring Boot, Spring Security, Spring Data JPA, RESTful API, WebSocket STOMP, Virtual Threads), Node.js\n• **Frontend**: JavaScript/TypeScript, ReactJS, React Router, TanStack Query, Tailwind CSS, HTML5/CSS3\n• **Database & Caching**: MySQL, PostgreSQL, Redis (Caching, Distributed Locking), MongoDB\n• **DevOps & Cloud**: Docker, GitHub Actions (CI/CD), AWS (EC2, ECS Fargate, ECR, S3), Nginx, Linux (Ubuntu), Terraform (IaC)\n• **Quy trình & Khác**: Clean Architecture, REST API Design, Flyway, Maven, Postman, AI Agents hỗ trợ lập trình.',
     scrollTo: '#skills',
-    suggestions: ['Dự án tiêu biểu', 'Kiến trúc CI/CD AWS', 'Thông tin liên hệ']
+    suggestions: ['SmartSalon', 'Hệ thống POS', 'Xem CV', 'Thông tin liên hệ']
   },
   projects: {
     id: 'projects',
     patterns: [
       'du an', 'project', 'projects', 'san pham', 'ma nguon', 'github', 'repo',
-      'repository', 'repositories', 'smartsalon', 'the booking site', 'booking site',
-      'pos quan ly ban hang', 'pos', 'my profile', 'du an spring boot', 'du an java',
-      'du an react', 'du an tieu bieu', 'cac du an', 'kho ma nguon'
+      'repository', 'repositories', 'du an spring boot', 'du an java',
+      'du an react', 'du an tieu bieu', 'cac du an', 'kho ma nguon', 'danh sach du an'
     ],
     response: 'Dưới đây là **4 dự án mã nguồn mở tiêu biểu** trên GitHub của Nguyễn Công Hậu:\n\n• **[SmartSalon](https://github.com/congHau02/SmartSalon)**: Hệ thống quản lý salon và đặt lịch hẹn thông minh với kiến trúc Full-Stack hiện đại.\n• **[The-Booking-Site](https://github.com/congHau02/The-Booking-Site)**: Nền tảng đặt phòng trực tuyến tối ưu trải nghiệm người dùng và luồng đặt chỗ.\n• **[POS_QUAN_LY_BAN_HANG](https://github.com/congHau02/POS_QUAN_LY_BAN_HANG)**: Hệ thống quản lý bán hàng tại điểm bán (Point of Sale) hoàn chỉnh (quản lý sản phẩm, đơn hàng, hóa đơn).\n• **[My-profile](https://github.com/congHau02/My-profile)**: Portfolio cá nhân tương tác cao, mã nguồn mở triển khai CI/CD trên GitHub Pages.',
     scrollTo: null,
-    suggestions: ['Kỹ năng công nghệ', 'Học vấn & Kinh nghiệm', 'Thông tin liên hệ']
+    suggestions: ['SmartSalon', 'Hệ thống POS', 'The Booking Site', 'My-profile', 'Xem CV']
+  },
+  project_smartsalon: {
+    id: 'project_smartsalon',
+    patterns: [
+      'smartsalon', 'smart salon', 'du an smartsalon', 'he thong salon', 'dat lich salon',
+      'du an dat lich', 'salon', 'dat lich truc tuyen', 'double booking'
+    ],
+    response: 'Chi tiết dự án **[SmartSalon](https://github.com/congHau02/SmartSalon)** - Hệ thống Quản lý Vận hành, Đặt lịch & POS Chuỗi Salon:\n\n• **Vai trò**: Fullstack Developer\n• **Công nghệ**: Java 25, Spring Boot 4, React 19, Redis, MySQL, Spring WebSocket (STOMP), PayOS, Docker, Tailwind CSS\n• **Tính năng & Kiến trúc nổi bật**:\n  - **Đặt lịch & POS Real-time**: Bảng điều phối quầy POS đa chi nhánh, cập nhật trạng thái đơn tức thì qua WebSocket (STOMP).\n  - **Khóa phân tán Redis**: Thiết kế cơ chế Distributed Lock trên Redis (`MSETNX`, TTL 5 phút), ngăn chặn triệt để tình trạng đặt trùng lịch (double-booking) khi nhiều khách cùng đặt một khung giờ.\n  - **Thanh toán tự động PayOS**: Tích hợp cổng thanh toán VietQR kèm Webhook tự động xác nhận đơn và Scheduled Job tự động thu hồi slot quá hạn thanh toán.\n  - **Nghiệp vụ kho & Tính hoa hồng**: Xây dựng logic trừ kho hóa chất theo định mức tiêu hao (BOM) và tính toán hoa hồng kỹ thuật viên đảm bảo toàn vẹn dữ liệu với `@Transactional`.\n\n🔗 **GitHub**: [github.com/congHau02/SmartSalon](https://github.com/congHau02/SmartSalon)',
+    scrollTo: null,
+    suggestions: ['Hệ thống POS', 'The Booking Site', 'Xem CV', 'Kỹ năng công nghệ']
+  },
+  project_pos: {
+    id: 'project_pos',
+    patterns: [
+      'pos quan ly ban hang', 'pos', 'he thong pos', 'du an pos',
+      'quan ly ban hang', 'ban hang pos', 'pos ban hang'
+    ],
+    response: 'Chi tiết dự án **[POS_QUAN_LY_BAN_HANG](https://github.com/congHau02/POS_QUAN_LY_BAN_HANG)** - Hệ thống Quản lý Bán hàng tại Điểm bán:\n\n• **Vai trò**: Fullstack Developer\n• **Công nghệ**: Java, Spring Boot, ReactJS, MySQL, AWS S3, Docker, GitHub Actions, AWS EC2 (Ubuntu)\n• **Tính năng & Kiến trúc nổi bật**:\n  - **Quản lý bán hàng & Hóa đơn**: Xây dựng hệ thống quản lý hóa đơn, sản phẩm và đơn hàng hoàn chỉnh, tối ưu trải nghiệm bán lẻ.\n  - **Thanh toán VietQR PayOS**: Tích hợp cổng thanh toán PayOS (mã QR), tự động cập nhật trạng thái thanh toán thời gian thực.\n  - **Triển khai Cloud & CI/CD**: Lưu trữ hóa đơn trên AWS S3; thiết lập luồng CI/CD tự động bằng GitHub Actions để build Docker images và tự động deploy hệ thống (Backend, Frontend, Nginx) lên máy chủ AWS EC2 (Ubuntu).\n\n🔗 **GitHub**: [github.com/congHau02/POS_QUAN_LY_BAN_HANG](https://github.com/congHau02/POS_QUAN_LY_BAN_HANG)',
+    scrollTo: null,
+    suggestions: ['SmartSalon', 'The Booking Site', 'Xem CV', 'Kỹ năng công nghệ']
+  },
+  project_booking: {
+    id: 'project_booking',
+    patterns: [
+      'the booking site', 'booking site', 'dat phong', 'du an booking', 'the booking'
+    ],
+    response: 'Chi tiết dự án **[The-Booking-Site](https://github.com/congHau02/The-Booking-Site)** - Nền tảng Đặt phòng Trực tuyến:\n\n• **Vai trò**: Frontend / Fullstack Developer\n• **Công nghệ**: JavaScript/TypeScript, ReactJS, HTML5/CSS3, RESTful APIs\n• **Tính năng & Trải nghiệm**:\n  - Giao diện tìm kiếm, lọc phòng nghỉ và xem chi tiết phòng được tối ưu UX mượt mà trên cả desktop và mobile.\n  - Luồng đặt phòng trực quan, xử lý form xác thực thông tin khách hàng và kiểm tra tính sẵn sàng của phòng theo thời gian thực.\n\n🔗 **GitHub**: [github.com/congHau02/The-Booking-Site](https://github.com/congHau02/The-Booking-Site)',
+    scrollTo: null,
+    suggestions: ['SmartSalon', 'Hệ thống POS', 'Xem CV', 'Dự án tiêu biểu']
+  },
+  project_myprofile: {
+    id: 'project_myprofile',
+    patterns: [
+      'my profile', 'myprofile', 'du an profile', 'portfolio nay', 'trang web nay', 'web profile'
+    ],
+    response: 'Chi tiết dự án **[My-profile](https://github.com/congHau02/My-profile)** - Interactive Developer Portfolio:\n\n• **Vai trò**: Tác giả & Fullstack Developer\n• **Công nghệ**: Vanilla JavaScript (ES6+), HTML5 Semantics, CSS3 Custom Properties (Sora Design System), Node.js test runner\n• **Tính năng & Hạ tầng nổi bật**:\n  - **AI Chatbot Client-Side**: Trợ lý ảo phản hồi tức thì 0ms độ trễ, 100% client-side rule-based, bảo mật tuyệt đối, không lộ API keys.\n  - **Cloud Infrastructure (IaC)**: Toàn bộ hạ tầng đám mây được quản trị bằng Terraform (IaC) tự động hóa CI/CD qua GitHub Actions với OIDC Auth, đóng gói Docker đẩy lên AWS ECR và chạy trên AWS ECS Fargate serverless.\n  - **Trải nghiệm người dùng**: Thiết kế tương tác cao, hỗ trợ chuyển đổi Light/Dark mode, mượt mà trên mọi kích cỡ màn hình.\n\n🔗 **GitHub**: [github.com/congHau02/My-profile](https://github.com/congHau02/My-profile)',
+    scrollTo: null,
+    suggestions: ['Xem CV', 'SmartSalon', 'Hệ thống POS', 'Kỹ năng công nghệ']
   },
   about: {
     id: 'about',
@@ -50,9 +100,9 @@ const CHATBOT_KNOWLEDGE_BASE = {
       'about', 'gioi thieu', 'ban la ai', 'nguyen cong hau', 'thong tin',
       'profile', 'ly lich', 'la ai', 'tac gia', 'chu nhan', 'ban than', 'ai day'
     ],
-    response: '**Nguyễn Công Hậu** - Full-Stack Software Engineer & Cloud DevOps Enthusiast 🚀\n\n• Sinh viên ngành Công nghệ thông tin tại **Trường Đại học Giao thông Vận tải (UTC)**.\n• Định hướng phát triển phần mềm Full-stack (React, Java Spring Boot) và kiến trúc hạ tầng Cloud CI/CD trên nền tảng AWS.\n• Duy trì kết quả học tập tốt (GPA > 3.0), nền tảng tư duy logic vững vàng từ kinh nghiệm làm trợ giảng môn Toán cấp 2.',
+    response: '**Nguyễn Công Hậu** - Fullstack Developer (Fresher/Intern) 🚀\n\n• Sinh viên năm 4 ngành Công nghệ thông tin tại **Trường Đại học Giao thông Vận tải (UTC)** (GPA > 3.1 / 4.0).\n• Định hướng chuyên sâu Fullstack Developer với trọng tâm **Java Spring Boot** và **ReactJS**.\n• Có nền tảng vững chắc về thiết kế hệ thống RESTful API, tối ưu hóa truy vấn CSDL, xử lý đồng thời với **Redis Distributed Lock**, tích hợp thanh toán thực tế **PayOS**, và triển khai tự động hóa **CI/CD** trên AWS Cloud.',
     scrollTo: '#info',
-    suggestions: ['Kỹ năng công nghệ', 'Dự án tiêu biểu', 'Học vấn & Bằng cấp', 'Thông tin liên hệ']
+    suggestions: ['Xem CV', 'Dự án tiêu biểu', 'Kỹ năng công nghệ', 'Thông tin liên hệ']
   },
   education: {
     id: 'education',
@@ -61,9 +111,9 @@ const CHATBOT_KNOWLEDGE_BASE = {
       'kinh nghiem', 'tro giang', 'bang cap', 'nganh hoc', 'giao thong van tai',
       'hoc tap', 'sinh vien'
     ],
-    response: 'Hành trình **Học vấn & Trải nghiệm** của Nguyễn Công Hậu:\n\n• **Học vấn**: Trường Đại học Giao thông Vận tải (UTC)\n• **Chuyên ngành**: Công nghệ thông tin (IT) | GPA > 3.0 / 4.0\n• **Kinh nghiệm**: Trợ giảng (Teaching Assistant) môn Toán cấp 2 - rèn luyện khả năng tư duy logic, giải quyết vấn đề và truyền đạt kỹ thuật mạch lạc.',
+    response: 'Hành trình **Học vấn & Trải nghiệm** của Nguyễn Công Hậu:\n\n• **Học vấn**: Trường Đại học Giao thông Vận tải (UTC) (09/2023 – 09/2027)\n• **Chuyên ngành**: Công nghệ thông tin (IT) | Dự kiến tốt nghiệp 09/2027 (**GPA > 3.1 / 4.0**)\n• **Kinh nghiệm**: Trợ giảng (Teaching Assistant) môn Toán cấp 2 - rèn luyện khả năng tư duy logic, giải quyết vấn đề và truyền đạt kỹ thuật mạch lạc.',
     scrollTo: '#education',
-    suggestions: ['Kỹ năng công nghệ', 'Dự án tiêu biểu', 'Thông tin liên hệ']
+    suggestions: ['Xem CV', 'Dự án tiêu biểu', 'Kỹ năng công nghệ', 'Thông tin liên hệ']
   },
   contact: {
     id: 'contact',
@@ -72,16 +122,16 @@ const CHATBOT_KNOWLEDGE_BASE = {
       'so dien thoai', 'facebook', 'instagram', 'github', 'trao doi', 'ket noi',
       'social', 'phone', 'nhan tin'
     ],
-    response: 'Bạn có thể liên hệ và kết nối với **Nguyễn Công Hậu** qua các kênh:\n\n• **GitHub**: [github.com/congHau02](https://github.com/congHau02)\n• **Facebook**: [Nguyễn Công Hậu](https://www.facebook.com/yangqi.28)\n• **Instagram**: [@cong.hau05](https://www.instagram.com/cong.hau05/)',
+    response: 'Bạn có thể liên hệ và kết nối trực tiếp với **Nguyễn Công Hậu** qua:\n\n• **Điện thoại**: [+84 394812496](tel:+84394812496)\n• **Email**: [hauyhauy2005@gmail.com](mailto:hauyhauy2005@gmail.com)\n• **GitHub**: [github.com/congHau02](https://github.com/congHau02)\n• **Facebook**: [Nguyễn Công Hậu](https://www.facebook.com/yangqi.28)\n• **Instagram**: [@cong.hau05](https://www.instagram.com/cong.hau05/)\n• **Website**: [conghau02.github.io/My-profile](https://conghau02.github.io/My-profile/)',
     scrollTo: '#info',
-    suggestions: ['Dự án tiêu biểu', 'Kỹ năng công nghệ', 'Giới thiệu bản thân']
+    suggestions: ['Xem CV', 'Dự án tiêu biểu', 'Kỹ năng công nghệ', 'Giới thiệu bản thân']
   },
   fallback: {
     id: 'fallback',
     patterns: [],
-    response: 'Xin lỗi, mình chưa hiểu rõ câu hỏi này hoặc thông tin nằm ngoài phạm vi portfolio của Nguyễn Công Hậu 😅\n\nBạn có thể thử chọn các gợi ý bên dưới hoặc hỏi về **kỹ năng**, **dự án**, **học vấn** hoặc **thông tin liên hệ** nhé!',
+    response: 'Xin lỗi, mình chưa hiểu rõ câu hỏi này hoặc thông tin nằm ngoài phạm vi portfolio của Nguyễn Công Hậu 😅\n\nBạn có thể thử chọn các gợi ý bên dưới hoặc hỏi về **Xem CV**, **kỹ năng**, **dự án**, **học vấn** hoặc **thông tin liên hệ** nhé!',
     scrollTo: null,
-    suggestions: ['Kỹ năng công nghệ', 'Dự án tiêu biểu', 'Thông tin liên hệ']
+    suggestions: ['Xem CV', 'Dự án tiêu biểu', 'Kỹ năng công nghệ', 'Thông tin liên hệ']
   }
 };
 
@@ -232,8 +282,12 @@ function formatMarkdown(text) {
   // 2. Bold text: **text** -> <strong>text</strong>
   safe = safe.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 
-  // 3. Hyperlinks: [text](url) -> <a href="url" target="_blank" rel="noopener noreferrer">text</a>
-  safe = safe.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+|#[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+  // 3. Hyperlinks: [text](url) -> <a href="url" target="_blank" rel="noopener noreferrer">text</a> (with download attribute for PDF)
+  safe = safe.replace(/\[([^\]]+)\]\(((?:https?:\/\/|\.\/|#|mailto:|tel:)[^\s)]+)\)/g, (match, text, url) => {
+    const isPdf = url.toLowerCase().endsWith('.pdf');
+    const downloadAttr = isPdf ? ' download="CV-Nguyen-Cong-Hau.pdf"' : '';
+    return `<a href="${url}" target="_blank" rel="noopener noreferrer"${downloadAttr}>${text}</a>`;
+  });
 
   // 4. Bullet points: • -> <span class="ai-chatbot-bullet">•</span>
   safe = safe.replace(/•/g, '<span class="ai-chatbot-bullet">•</span>');

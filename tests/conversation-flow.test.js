@@ -267,18 +267,19 @@ describe('04: End-to-End Conversation Flow, Typing Delay, Quick Reply Chips and 
       assert.ok(bubble, 'Greeting must have message bubble');
       assert.ok(bubble.innerHTML.includes('Trợ lý ảo của Nguyễn Công Hậu'), 'Must contain assistant greeting');
 
-      // Verify initial Quick Reply Chips: "Kỹ năng công nghệ", "Dự án tiêu biểu", "Thông tin liên hệ"
+      // Verify initial Quick Reply Chips: "Kỹ năng công nghệ", "Dự án tiêu biểu", "Thông tin liên hệ", "Xem CV"
       const chipsContainer = greetingMessage.querySelector('.ai-chatbot-chips');
       assert.ok(chipsContainer, 'Greeting must include Quick Reply Chips container');
 
       const chipElements = greetingMessage.querySelectorAll('.ai-chatbot-chip');
-      assert.strictEqual(chipElements.length, 3, 'Must render exactly 3 initial Quick Reply Chips');
+      assert.strictEqual(chipElements.length, 4, 'Must render exactly 4 initial Quick Reply Chips');
 
       const chipLabels = chipElements.map(c => c.textContent.trim());
       assert.deepStrictEqual(chipLabels, [
         'Kỹ năng công nghệ',
         'Dự án tiêu biểu',
-        'Thông tin liên hệ'
+        'Thông tin liên hệ',
+        'Xem CV'
       ]);
     });
 
@@ -339,6 +340,34 @@ describe('04: End-to-End Conversation Flow, Typing Delay, Quick Reply Chips and 
       assert.ok(botResponse, 'Bot response for skills must be appended');
       const botBubble = botResponse.querySelector('.ai-chatbot-message__bubble');
       assert.ok(botBubble.innerHTML.includes('React') || botBubble.innerHTML.includes('Java Spring Boot'), 'Should match skills intent');
+    });
+
+    it('clicking "Xem CV" chip dispatches inquiry and returns downloadable resume link', async () => {
+      const { doc, win, elements } = createMockDOM();
+      global.document = doc;
+      global.window = win;
+
+      initChatbotToggle();
+      initChatbotWindow();
+
+      elements['ai-chatbot-toggle'].click();
+
+      const greetingMessage = elements['ai-chatbot-messages'].children[0];
+      const chips = greetingMessage.querySelectorAll('.ai-chatbot-chip');
+      const cvChip = chips.find(c => c.textContent.trim() === 'Xem CV');
+      assert.ok(cvChip, 'Must contain "Xem CV" chip');
+
+      cvChip.click();
+
+      await new Promise(resolve => setTimeout(resolve, 650));
+
+      const botCvResponse = elements['ai-chatbot-messages'].children.find(
+        m => m !== greetingMessage && m.classList.contains('ai-chatbot-message--bot') && !m.classList.contains('ai-chatbot-typing-message')
+      );
+      assert.ok(botCvResponse, 'Bot response for CV must be appended');
+      const botBubble = botCvResponse.querySelector('.ai-chatbot-message__bubble');
+      assert.ok(botBubble.innerHTML.includes('CV-Nguyen-Cong-Hau.pdf'), 'Must render CV PDF link');
+      assert.ok(botBubble.innerHTML.includes('Fullstack Developer'), 'Must render resume highlights');
     });
   });
 
@@ -423,7 +452,7 @@ describe('04: End-to-End Conversation Flow, Typing Delay, Quick Reply Chips and 
       const chips = botMessage.querySelectorAll('.ai-chatbot-chip');
       assert.ok(chips.length > 0, 'Must include contextual follow-up chips');
       const labels = chips.map(c => c.textContent.trim());
-      assert.deepStrictEqual(labels, ['Kỹ năng công nghệ', 'Học vấn & Kinh nghiệm', 'Thông tin liên hệ']);
+      assert.deepStrictEqual(labels, ['SmartSalon', 'Hệ thống POS', 'The Booking Site', 'My-profile', 'Xem CV']);
     });
   });
 
