@@ -70,8 +70,10 @@ describe('03: Chat Window UI, Sora Theme Integration and Micro-Markdown Formatte
       const formatted = formatMarkdown(projectsResponse);
 
       // Check bold
-      assert.ok(formatted.includes('<strong>4 dự án mã nguồn mở tiêu biểu</strong>'));
+      assert.ok(formatted.includes('<strong>6 dự án tiêu biểu</strong>'));
       // Check links
+      assert.ok(formatted.includes('<a href="https://github.com/littoru05/GYM-management" target="_blank" rel="noopener noreferrer">GYM-management</a>'));
+      assert.ok(formatted.includes('<a href="https://yangqi-music.vercel.app" target="_blank" rel="noopener noreferrer">Yangqi Music (MusicForPer)</a>'));
       assert.ok(formatted.includes('<a href="https://github.com/congHau02/SmartSalon" target="_blank" rel="noopener noreferrer">SmartSalon</a>'));
       assert.ok(formatted.includes('<a href="https://github.com/congHau02/The-Booking-Site" target="_blank" rel="noopener noreferrer">The-Booking-Site</a>'));
       // Check bullets
