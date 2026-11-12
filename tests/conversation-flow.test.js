@@ -445,14 +445,16 @@ describe('04: End-to-End Conversation Flow, Typing Delay, Quick Reply Chips and 
 
       // Formatted markdown check
       const bubble = botMessage.querySelector('.ai-chatbot-message__bubble');
-      assert.ok(bubble.innerHTML.includes('<strong>4 dự án mã nguồn mở tiêu biểu</strong>'));
+      assert.ok(bubble.innerHTML.includes('<strong>6 dự án tiêu biểu</strong>'));
+      assert.ok(bubble.innerHTML.includes('<a href="https://github.com/littoru05/GYM-management"'));
+      assert.ok(bubble.innerHTML.includes('<a href="https://yangqi-music.vercel.app"'));
       assert.ok(bubble.innerHTML.includes('<a href="https://github.com/congHau02/SmartSalon"'));
 
       // Contextual chips check
       const chips = botMessage.querySelectorAll('.ai-chatbot-chip');
       assert.ok(chips.length > 0, 'Must include contextual follow-up chips');
       const labels = chips.map(c => c.textContent.trim());
-      assert.deepStrictEqual(labels, ['SmartSalon', 'Hệ thống POS', 'The Booking Site', 'My-profile', 'Xem CV']);
+      assert.deepStrictEqual(labels, ['GYM-management', 'Yangqi Music', 'SmartSalon', 'Hệ thống POS', 'Xem CV']);
     });
   });
 

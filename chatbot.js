@@ -25,9 +25,9 @@ const CHATBOT_KNOWLEDGE_BASE = {
       'ban cv', 'pdf cv', 'curriculum vitae', 'xem resume', 'download resume', 'link cv',
       'cho xem cv', 'cho minh xin cv', 'gui cv', 'cv nguyen cong hau'
     ],
-    response: 'Dưới đây là thông tin **Curriculum Vitae (CV)** của **Nguyễn Công Hậu**:\n\n• **Vị trí định hướng**: Fullstack Developer (Fresher/Intern) - Trọng tâm **Java Spring Boot & ReactJS**\n• **Học vấn**: Trường Đại học Giao thông Vận tải (UTC) | Ngành Công nghệ thông tin (09/2023 – 09/2027) | **GPA > 3.1 / 4.0**\n• **Thế mạnh chuyên môn**: Thiết kế RESTful API chuẩn Clean Architecture, xử lý đồng thời & chống race condition với **Redis Distributed Lock**, tích hợp cổng thanh toán thực tế **PayOS (VietQR)**, tối ưu cơ sở dữ liệu, đóng gói Docker và thiết lập pipeline **CI/CD** triển khai đám mây AWS.\n• **Dự án thực chiến**: **SmartSalon** (Spring Boot 4, React 19, Redis MSETNX lock, STOMP WebSocket) & **POS Bán Hàng** (CI/CD GitHub Actions, Docker, AWS EC2, S3).\n\n📥 **[Tải / Xem CV đầy đủ (PDF)](./assets/cv/CV-Nguyen-Cong-Hau.pdf)**',
+    response: 'Dưới đây là thông tin **Curriculum Vitae (CV)** của **Nguyễn Công Hậu**:\n\n• **Vị trí định hướng**: Fullstack Developer & Cloud/DevOps Engineer (Fresher/Intern) - Trọng tâm **Java Spring Boot, ReactJS/TypeScript & AWS CI/CD**\n• **Học vấn**: Trường Đại học Giao thông Vận tải (UTC) | Ngành Công nghệ thông tin (09/2023 – 09/2027) | **GPA > 3.1 / 4.0**\n• **Thế mạnh chuyên môn**: Thiết kế RESTful API chuẩn Clean Architecture, xử lý đồng thời & chống race condition với **Redis Distributed Lock**, direct-pipe HTTP 206 streaming (**Spring Boot Virtual Threads**), tối ưu cơ sở dữ liệu (**PostgreSQL / MySQL / Flyway**), đóng gói Docker, **Terraform (IaC)**, **GitHub Actions CI/CD** và triển khai đám mây AWS (**ECS Fargate, RDS, ALB, CloudWatch**) với cơ chế **Auto-Rollback**.\n• **Dự án tiêu biểu**: **GYM-management** (DevOps AWS Terraform & Auto-Rollback), **Yangqi Music / MusicForPer** (Fullstack React 19 + TypeScript + Spring Boot 3.4 BYOS), **SmartSalon** & **POS Bán Hàng**.\n\n📥 **[Tải / Xem CV đầy đủ (PDF)](./assets/cv/CV-Nguyen-Cong-Hau.pdf)**',
     scrollTo: null,
-    suggestions: ['SmartSalon', 'Hệ thống POS', 'Kỹ năng công nghệ', 'Thông tin liên hệ']
+    suggestions: ['GYM-management', 'Yangqi Music', 'SmartSalon', 'Kỹ năng công nghệ']
   },
   skills: {
     id: 'skills',
@@ -36,14 +36,17 @@ const CHATBOT_KNOWLEDGE_BASE = {
       'skills', 'skill', 'cong nghe', 'tech stack', 'stack',
       'frontend', 'backend', 'fullstack', 'cloud', 'devops', 'aws', 'docker',
       'terraform', 'java', 'spring', 'spring boot', 'react', 'reactjs',
-      'tailwindcss', 'supabase', 'mysql', 'co so du lieu', 'database',
-      'ci cd', 'pipeline', 'kien truc', 'rest api', 'api', 'ecs', 'ecr',
+      'typescript', 'tailwindcss', 'supabase', 'mysql', 'postgresql', 'postgres',
+      'co so du lieu', 'database', 'ci cd', 'pipeline', 'kien truc', 'rest api',
+      'api', 'ecs', 'ecr', 'rds', 'alb', 'cloudwatch', 'nginx', 'iac',
       'redis', 'distributed lock', 'websocket', 'stomp', 'payos', 'tanstack query',
-      'virtual threads', 'flyway', 'postman', 'ec2'
+      'zustand', 'web audio', 'pwa', 'indexeddb', 'virtual threads', 'flyway',
+      'postman', 'newman', 'selenium', 'vitest', 'ec2', 'auto rollback', 'rollback',
+      'caffeine', 'oauth2', 'aes', 'vercel', 'render'
     ],
-    response: 'Kỹ năng chuyên môn của **Nguyễn Công Hậu**:\n\n• **Backend**: Java (Spring Boot, Spring Security, Spring Data JPA, RESTful API, WebSocket STOMP, Virtual Threads), Node.js\n• **Frontend**: JavaScript/TypeScript, ReactJS, React Router, TanStack Query, Tailwind CSS, HTML5/CSS3\n• **Database & Caching**: MySQL, PostgreSQL, Redis (Caching, Distributed Locking), MongoDB\n• **DevOps & Cloud**: Docker, GitHub Actions (CI/CD), AWS (EC2, ECS Fargate, ECR, S3), Nginx, Linux (Ubuntu), Terraform (IaC)\n• **Quy trình & Khác**: Clean Architecture, REST API Design, Flyway, Maven, Postman, AI Agents hỗ trợ lập trình.',
+    response: 'Kỹ năng chuyên môn của **Nguyễn Công Hậu**:\n\n• **Backend**: Java 21/25 (Spring Boot 3/4, Spring Security, OAuth2, JWT, Spring Data JPA, RESTful API, WebSocket STOMP, Virtual Threads, RFC 7807 ProblemDetail), Node.js\n• **Frontend**: TypeScript, JavaScript, React 19, Zustand, TanStack Query, React Hook Form + Zod, Tailwind CSS v4, Web Audio API, PWA (IndexedDB), i18next, HTML5/CSS3\n• **Database & Caching**: PostgreSQL, MySQL 8.4, Redis (Caching, Distributed Locking), Caffeine Cache, Flyway (Expand-Contract Migrations), Supabase, MongoDB\n• **DevOps & Cloud**: Docker & Docker Compose, GitHub Actions (CI/CD OIDC), Terraform (IaC), AWS (ECS Fargate, ECR, RDS, ALB, CloudWatch, EC2, S3, SSM), Nginx, Linux (Ubuntu), Versioned Deploy & Self-Healing Auto-Rollback, Vercel & Render\n• **Kiểm thử & Quy trình**: JUnit 5, Mockito, Vitest, Newman (Postman CLI), Selenium WebDriver, Clean Architecture, AES-256-GCM, AI Agents hỗ trợ lập trình.',
     scrollTo: '#skills',
-    suggestions: ['SmartSalon', 'Hệ thống POS', 'Xem CV', 'Thông tin liên hệ']
+    suggestions: ['GYM-management', 'Yangqi Music', 'SmartSalon', 'Xem CV']
   },
   projects: {
     id: 'projects',
@@ -52,9 +55,29 @@ const CHATBOT_KNOWLEDGE_BASE = {
       'repository', 'repositories', 'du an spring boot', 'du an java',
       'du an react', 'du an tieu bieu', 'cac du an', 'kho ma nguon', 'danh sach du an'
     ],
-    response: 'Dưới đây là **4 dự án mã nguồn mở tiêu biểu** trên GitHub của Nguyễn Công Hậu:\n\n• **[SmartSalon](https://github.com/congHau02/SmartSalon)**: Hệ thống quản lý salon và đặt lịch hẹn thông minh với kiến trúc Full-Stack hiện đại.\n• **[The-Booking-Site](https://github.com/congHau02/The-Booking-Site)**: Nền tảng đặt phòng trực tuyến tối ưu trải nghiệm người dùng và luồng đặt chỗ.\n• **[POS_QUAN_LY_BAN_HANG](https://github.com/congHau02/POS_QUAN_LY_BAN_HANG)**: Hệ thống quản lý bán hàng tại điểm bán (Point of Sale) hoàn chỉnh (quản lý sản phẩm, đơn hàng, hóa đơn).\n• **[My-profile](https://github.com/congHau02/My-profile)**: Portfolio cá nhân tương tác cao, mã nguồn mở triển khai CI/CD trên GitHub Pages.',
+    response: 'Dưới đây là **6 dự án tiêu biểu** của Nguyễn Công Hậu:\n\n• **[GYM-management](https://github.com/littoru05/GYM-management)** *(DevOps Engineer)*: Hệ thống quản lý phòng tập Gym Monorepo — hạ tầng AWS Free Tier bằng Terraform (VPC, ALB, ECS Fargate, ECR, RDS MySQL Private Subnet, CloudWatch), CI/CD GitHub Actions, Flyway Expand-Contract, Versioned Deploy & Auto-Rollback, Hibernate về $0.\n• **[Yangqi Music (MusicForPer)](https://yangqi-music.vercel.app)** *(Fullstack Developer · Private Repo)*: Nền tảng nghe nhạc đám mây cá nhân BYOS (Google Drive) với React 19, TypeScript, Web Audio FX (5-Band EQ, Slowed+Reverb, PWA Offline) và Spring Boot 3.4 Virtual Threads Direct-Pipe HTTP 206 Streaming.\n• **[SmartSalon](https://github.com/congHau02/SmartSalon)** *(Fullstack Developer)*: Hệ thống quản lý salon, POS đa chi nhánh và đặt lịch hẹn thời gian thực (Spring Boot 4, React 19, Redis Distributed Lock, WebSocket STOMP, PayOS).\n• **[POS_QUAN_LY_BAN_HANG](https://github.com/congHau02/POS_QUAN_LY_BAN_HANG)** *(Fullstack Developer)*: Hệ thống quản lý bán hàng tại điểm bán (Point of Sale) tích hợp PayOS VietQR, AWS S3 và CI/CD lên AWS EC2.\n• **[The-Booking-Site](https://github.com/congHau02/The-Booking-Site)** *(Frontend / Fullstack Developer)*: Nền tảng đặt phòng trực tuyến tối ưu trải nghiệm người dùng và luồng đặt chỗ.\n• **[My-profile](https://github.com/congHau02/My-profile)** *(Tác giả & Fullstack Developer)*: Portfolio cá nhân tương tác cao, tích hợp AI Chatbot client-side và CI/CD trên GitHub Pages.',
     scrollTo: null,
-    suggestions: ['SmartSalon', 'Hệ thống POS', 'The Booking Site', 'My-profile', 'Xem CV']
+    suggestions: ['GYM-management', 'Yangqi Music', 'SmartSalon', 'Hệ thống POS', 'Xem CV']
+  },
+  project_gym: {
+    id: 'project_gym',
+    patterns: [
+      'gym management', 'gym', 'du an gym', 'he thong gym', 'quan ly phong tap',
+      'devops gym', 'gym devops', 'phong gym', 'gym-management'
+    ],
+    response: 'Chi tiết dự án **[GYM-management](https://github.com/littoru05/GYM-management)** - Hệ thống Quản lý Phòng tập Gym (Monorepo, 14 Use Cases):\n\n• **Vai trò**: DevOps Engineer (Thiết kế hạ tầng Cloud, CI/CD & Vận hành)\n• **Công nghệ DevOps & Cloud**: Docker & Docker Compose, GitHub Actions (`ci.yml`, `cd-staging.yml`, `cd-prod.yml`, `infra-control.yml`), Terraform (IaC modular), AWS ECS Fargate, Amazon ECR, AWS ALB, Amazon RDS MySQL (`db.t4g.micro` Private Subnet), AWS CloudWatch, AWS SSM, Nginx, Flyway, DuckDNS\n• **Stack hệ thống**: Java 21, Spring Boot 3, Spring Security/JWT, React 19, Vite, Tailwind CSS, MySQL 8.4, JUnit 5, Mockito, Newman, Selenium\n• **Đóng góp DevOps nổi bật**:\n  - **Infrastructure as Code (Terraform)**: Module hóa toàn bộ hạ tầng AWS (`vpc`, `alb`, `ecs`, `rds`, `ecr`, `ci-oidc`, `cost-monitoring`) cho 2 môi trường `staging` & `prod`, cô lập RDS trong Private Database Subnet.\n  - **Zero-Cost Lifecycle Control**: Workflow `infra-control.yml` cho phép `Pause`, `Hibernate` (tạm dừng ALB/ECS/RDS đưa chi phí về **$0** mà vẫn giữ 100% dữ liệu 20 GB RDS) và `Resume` tự động cập nhật DuckDNS.\n  - **Versioned Deploy & Auto-Rollback**: Triển khai container gắn version theo `github.sha`, Nginx cache partitioning, Flyway Expand-Contract migration kèm pre-migration backup, Spring Actuator/Nginx health probes và cơ chế tự động rollback khi health check lỗi.\n\n🔗 **GitHub**: [github.com/littoru05/GYM-management](https://github.com/littoru05/GYM-management)',
+    scrollTo: '#skills',
+    suggestions: ['Yangqi Music', 'SmartSalon', 'Kỹ năng công nghệ', 'Xem CV']
+  },
+  project_music: {
+    id: 'project_music',
+    patterns: [
+      'yangqi music', 'yangqi', 'musicforper', 'music for per', 'du an nhac',
+      'du an am nhac', 'music player', 'nghe nhac', 'google drive music', 'byos'
+    ],
+    response: 'Chi tiết dự án **[Yangqi Music (MusicForPer)](https://yangqi-music.vercel.app)** - Personal Cloud Music Player (Google Drive BYOS Edition):\n\n• **Vai trò**: Fullstack Developer *(Private Repository)*\n• **Công nghệ**: Java 21, Spring Boot 3.4.3 (Virtual Threads), Spring Security OAuth2, PostgreSQL 16 (Supabase), Flyway (V1–V12), Caffeine Cache, React 19, TypeScript, Vite 6, TailwindCSS v4, Zustand, TanStack Query v5, React Hook Form + Zod, Web Audio API, PWA (`idb-keyval`), `i18next`, Vitest\n• **Kiến trúc & Tính năng nổi bật**:\n  - **BYOS & Direct-Pipe Streaming**: Lưu trữ nhạc 100% trên Google Drive cá nhân (`drive.file` scope), stream trực tiếp HTTP 206 Partial Content qua `StreamingResponseBody` + Virtual Threads không tốn RAM server; mã hóa refresh token bằng **AES-256-GCM** và cache Access Token bằng **Caffeine**.\n  - **Web Audio FX Studio**: Bộ cân bằng **5-Band Equalizer**, hiệu ứng **Slowed + Spatial Reverb**, **Ambient Sub-Mix** (tiếng mưa, đĩa than), **Smart Sleep Timer** fade-out tuyến tính và OLED Audio Visualizer tiết kiệm pin.\n  - **PWA Offline & Media Session**: Lưu bài hát ngoại tuyến qua IndexedDB, đồng bộ lời bài hát Karaoke 3 tầng (ID3/LRC/DB), prefetch bài kế tiếp (< 5ms) và điều khiển phát chạy ngầm ngoài màn hình khóa.\n  - **Triển khai & Chất lượng**: Frontend trên **Vercel** (Reverse Proxy `/api/*` Same-Origin), Backend Docker trên **Render**, DB **Supabase PostgreSQL**, đạt **788 tests passing** trên Frontend (167 test files).\n\n🌐 **Live Demo**: [yangqi-music.vercel.app](https://yangqi-music.vercel.app) *(Mã nguồn hiện ở chế độ Private)*',
+    scrollTo: null,
+    suggestions: ['GYM-management', 'SmartSalon', 'Kỹ năng công nghệ', 'Xem CV']
   },
   project_smartsalon: {
     id: 'project_smartsalon',
@@ -100,9 +123,9 @@ const CHATBOT_KNOWLEDGE_BASE = {
       'about', 'gioi thieu', 'ban la ai', 'nguyen cong hau', 'thong tin',
       'profile', 'ly lich', 'la ai', 'tac gia', 'chu nhan', 'ban than', 'ai day'
     ],
-    response: '**Nguyễn Công Hậu** - Fullstack Developer (Fresher/Intern) 🚀\n\n• Sinh viên năm 4 ngành Công nghệ thông tin tại **Trường Đại học Giao thông Vận tải (UTC)** (GPA > 3.1 / 4.0).\n• Định hướng chuyên sâu Fullstack Developer với trọng tâm **Java Spring Boot** và **ReactJS**.\n• Có nền tảng vững chắc về thiết kế hệ thống RESTful API, tối ưu hóa truy vấn CSDL, xử lý đồng thời với **Redis Distributed Lock**, tích hợp thanh toán thực tế **PayOS**, và triển khai tự động hóa **CI/CD** trên AWS Cloud.',
+    response: '**Nguyễn Công Hậu** - Fullstack Developer & Cloud/DevOps Enthusiast (Fresher/Intern) 🚀\n\n• Sinh viên năm 4 ngành Công nghệ thông tin tại **Trường Đại học Giao thông Vận tải (UTC)** (GPA > 3.1 / 4.0).\n• Định hướng phát triển phần mềm Fullstack (**Java Spring Boot**, **ReactJS / TypeScript**) kết hợp hạ tầng **Cloud & DevOps** (**Docker**, **Terraform IaC**, **GitHub Actions CI/CD**, **AWS ECS/RDS/ALB**).\n• Đảm nhiệm vai trò **DevOps Engineer** trong dự án **GYM-management** (Self-healing Auto-Rollback, Zero-Cost AWS Lifecycle) và **Fullstack Developer** cho các dự án **Yangqi Music (MusicForPer)**, **SmartSalon** và **POS Bán Hàng**.',
     scrollTo: '#info',
-    suggestions: ['Xem CV', 'Dự án tiêu biểu', 'Kỹ năng công nghệ', 'Thông tin liên hệ']
+    suggestions: ['GYM-management', 'Yangqi Music', 'Dự án tiêu biểu', 'Xem CV']
   },
   education: {
     id: 'education',
@@ -766,21 +789,34 @@ function closeChat() {
 
 /**
  * Initializes the floating action button toggle behavior.
+ *
+ * @param {Document} [customDoc] - Optional document interface
+ * @param {Function[]} [cleanups] - Optional array to collect teardown callbacks
  */
-function initChatbotToggle() {
-  if (typeof document === 'undefined') return;
+function initChatbotToggle(customDoc, cleanups) {
+  const doc = customDoc || (typeof document !== 'undefined' ? document : null);
+  if (!doc) return;
 
-  const toggleBtn = document.getElementById('ai-chatbot-toggle');
+  const toggleBtn = doc.getElementById('ai-chatbot-toggle');
   if (!toggleBtn) return;
 
-  toggleBtn.addEventListener('click', () => {
+  const handleClick = () => {
     const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
     if (isExpanded) {
       closeChat();
     } else {
       openChat();
     }
-  });
+  };
+
+  toggleBtn.addEventListener('click', handleClick);
+  if (Array.isArray(cleanups)) {
+    cleanups.push(() => {
+      if (typeof toggleBtn.removeEventListener === 'function') {
+        toggleBtn.removeEventListener('click', handleClick);
+      }
+    });
+  }
 }
 
 /**
@@ -790,23 +826,40 @@ function initChatbotToggle() {
  * - Handle Vietnamese IME composition (Telex/VNI) to prevent premature submission
  * - Wire up click outside to dismiss the chat window
  * - Auto-scrolls and manages focus for accessibility
+ *
+ * @param {Document} [customDoc] - Optional document interface
+ * @param {Function[]} [cleanups] - Optional array to collect teardown callbacks
  */
-function initChatbotWindow() {
-  if (typeof document === 'undefined') return;
+function initChatbotWindow(customDoc, cleanups) {
+  const doc = customDoc || (typeof document !== 'undefined' ? document : null);
+  if (!doc) return;
 
-  const closeBtn = document.getElementById('ai-chatbot-close');
-  const inputField = document.getElementById('ai-chatbot-input');
-  const sendBtn = document.getElementById('ai-chatbot-send');
-  const chatForm = document.getElementById('ai-chatbot-form');
+  const closeBtn = doc.getElementById('ai-chatbot-close');
+  const inputField = doc.getElementById('ai-chatbot-input');
+  const sendBtn = doc.getElementById('ai-chatbot-send');
+  const chatForm = doc.getElementById('ai-chatbot-form');
 
   if (closeBtn) {
     closeBtn.addEventListener('click', closeChat);
+    if (Array.isArray(cleanups)) {
+      cleanups.push(() => {
+        if (typeof closeBtn.removeEventListener === 'function') closeBtn.removeEventListener('click', closeChat);
+      });
+    }
   }
 
   // Click outside to close
-  if (typeof document.addEventListener === 'function' && !hasDocumentClickListener) {
-    document.addEventListener('click', handleDocumentClick);
+  if (typeof doc.addEventListener === 'function' && !hasDocumentClickListener) {
+    doc.addEventListener('click', handleDocumentClick);
     hasDocumentClickListener = true;
+    if (Array.isArray(cleanups)) {
+      cleanups.push(() => {
+        if (typeof doc.removeEventListener === 'function') {
+          doc.removeEventListener('click', handleDocumentClick);
+          hasDocumentClickListener = false;
+        }
+      });
+    }
   }
 
   let isComposing = false;
@@ -836,13 +889,9 @@ function initChatbotWindow() {
   }
 
   if (inputField) {
-    inputField.addEventListener('compositionstart', () => {
-      isComposing = true;
-    });
-    inputField.addEventListener('compositionend', () => {
-      isComposing = false;
-    });
-    inputField.addEventListener('keydown', (e) => {
+    const onCompStart = () => { isComposing = true; };
+    const onCompEnd = () => { isComposing = false; };
+    const onKeydown = (e) => {
       if (typeof e.stopPropagation === 'function') {
         e.stopPropagation();
       }
@@ -853,15 +902,39 @@ function initChatbotWindow() {
         e.preventDefault();
         handleMessageSubmit(e);
       }
-    });
+    };
+
+    inputField.addEventListener('compositionstart', onCompStart);
+    inputField.addEventListener('compositionend', onCompEnd);
+    inputField.addEventListener('keydown', onKeydown);
+
+    if (Array.isArray(cleanups)) {
+      cleanups.push(() => {
+        if (typeof inputField.removeEventListener === 'function') {
+          inputField.removeEventListener('compositionstart', onCompStart);
+          inputField.removeEventListener('compositionend', onCompEnd);
+          inputField.removeEventListener('keydown', onKeydown);
+        }
+      });
+    }
   }
 
   if (chatForm) {
     chatForm.addEventListener('submit', handleMessageSubmit);
+    if (Array.isArray(cleanups)) {
+      cleanups.push(() => {
+        if (typeof chatForm.removeEventListener === 'function') chatForm.removeEventListener('submit', handleMessageSubmit);
+      });
+    }
   }
 
   if (sendBtn && !chatForm) {
     sendBtn.addEventListener('click', handleMessageSubmit);
+    if (Array.isArray(cleanups)) {
+      cleanups.push(() => {
+        if (typeof sendBtn.removeEventListener === 'function') sendBtn.removeEventListener('click', handleMessageSubmit);
+      });
+    }
   }
 }
 
@@ -878,15 +951,19 @@ function initChatbotWindow() {
 function initChatbot(options = {}) {
   const doc = (options && options.document) || (typeof document !== 'undefined' ? document : null);
   const win = (options && options.window) || (typeof window !== 'undefined' ? window : null);
+  const cleanups = [];
 
-  initChatbotToggle();
-  initChatbotWindow();
+  initChatbotToggle(doc, cleanups);
+  initChatbotWindow(doc, cleanups);
 
   return {
     openChat: () => openChat(),
     closeChat: () => closeChat(),
     reset: () => resetChatState(),
-    destroy: () => resetChatState(),
+    destroy: () => {
+      resetChatState();
+      cleanups.splice(0).forEach((fn) => fn());
+    },
     handleUserMessage: (query, opts) => handleUserMessage(query, Object.assign({}, options, opts))
   };
 }

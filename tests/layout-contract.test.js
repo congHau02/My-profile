@@ -38,14 +38,14 @@ describe('Layout & Floating UI Architecture Contract', () => {
       assert.match(onTopMatch[1], /position:\s*fixed/i);
       assert.match(onTopMatch[1], /bottom:\s*88px/i);
       assert.match(onTopMatch[1], /right:\s*24px/i);
-      assert.match(onTopMatch[1], /z-index:\s*998/i);
+      assert.match(onTopMatch[1], /z-index:\s*var\(--z-on-top,\s*998\)/i);
 
       const toggleMatch = commonCss.match(/\.ai-chatbot-toggle[^{]*\{([^}]+)\}/);
       assert.ok(toggleMatch, '.ai-chatbot-toggle block must exist in common.css');
       assert.match(toggleMatch[1], /position:\s*fixed/i);
       assert.match(toggleMatch[1], /bottom:\s*24px/i);
       assert.match(toggleMatch[1], /right:\s*24px/i);
-      assert.match(toggleMatch[1], /z-index:\s*999/i);
+      assert.match(toggleMatch[1], /z-index:\s*var\(--z-chatbot-toggle,\s*999\)/i);
     });
 
     it('ensures bird companion and speech bubbles stack below active chatbot window', () => {

@@ -135,7 +135,7 @@ describe('03: Chat Window UI, Sora Theme Integration and Micro-Markdown Formatte
       assert.match(windowContent, /right:\s*24px/i, 'Must float at right: 24px on desktop');
       assert.match(windowContent, /border-radius:\s*(1[2-9]|2\d)px/i, 'Must have rounded corners (>=12px)');
       assert.match(windowContent, /box-shadow:/i, 'Must have box-shadow');
-      assert.match(windowContent, /z-index:\s*(1000|999)/i, 'Must have appropriate z-index');
+      assert.match(windowContent, /z-index:\s*(var\(--z-chatbot-window,\s*1000\)|1000|999)/i, 'Must have appropriate z-index');
     });
 
     it('adapts styling when Light Mode (html.light) is active', () => {

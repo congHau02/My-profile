@@ -38,10 +38,14 @@ describe('CHATBOT_KNOWLEDGE_BASE', () => {
     }
   });
 
-  it('projects intent includes verified descriptions and repository links for 4 public repos', () => {
+  it('projects intent includes verified descriptions and links for 6 featured projects', () => {
     const projects = CHATBOT_KNOWLEDGE_BASE.projects;
     assert.ok(projects);
     const resp = projects.response;
+    assert.ok(resp.includes('GYM-management'), 'Must mention GYM-management');
+    assert.ok(resp.includes('https://github.com/littoru05/GYM-management'), 'Must link GYM-management repo');
+    assert.ok(resp.includes('Yangqi Music (MusicForPer)'), 'Must mention Yangqi Music (MusicForPer)');
+    assert.ok(resp.includes('https://yangqi-music.vercel.app'), 'Must link Yangqi Music live demo');
     assert.ok(resp.includes('SmartSalon'), 'Must mention SmartSalon');
     assert.ok(resp.includes('https://github.com/congHau02/SmartSalon'), 'Must link SmartSalon repo');
     assert.ok(resp.includes('The-Booking-Site'), 'Must mention The-Booking-Site');
@@ -71,7 +75,21 @@ describe('CHATBOT_KNOWLEDGE_BASE', () => {
     assert.ok(Array.isArray(cvIntent.suggestions) && cvIntent.suggestions.length > 0);
   });
 
-  it('detailed project intents contain rich technical specs and GitHub links', () => {
+  it('detailed project intents contain rich technical specs and links', () => {
+    const gym = CHATBOT_KNOWLEDGE_BASE.project_gym;
+    assert.ok(gym, 'project_gym must exist');
+    assert.ok(gym.response.includes('https://github.com/littoru05/GYM-management'));
+    assert.ok(gym.response.includes('Terraform'));
+    assert.ok(gym.response.includes('Auto-Rollback'));
+    assert.ok(gym.response.includes('RDS'));
+
+    const music = CHATBOT_KNOWLEDGE_BASE.project_music;
+    assert.ok(music, 'project_music must exist');
+    assert.ok(music.response.includes('https://yangqi-music.vercel.app'));
+    assert.ok(music.response.includes('Private'));
+    assert.ok(music.response.includes('Web Audio'));
+    assert.ok(music.response.includes('Virtual Threads'));
+
     const smartsalon = CHATBOT_KNOWLEDGE_BASE.project_smartsalon;
     assert.ok(smartsalon, 'project_smartsalon must exist');
     assert.ok(smartsalon.response.includes('https://github.com/congHau02/SmartSalon'));
@@ -159,7 +177,10 @@ describe('matchIntent', () => {
     assert.strictEqual(matchIntent('thời tiết').id, 'fallback');
   });
 
-  it('correctly matches queries for all 4 public github repositories to their specific project intents', () => {
+  it('correctly matches queries for all 6 featured projects to their specific project intents', () => {
+    assert.strictEqual(matchIntent('GYM-management').id, 'project_gym');
+    assert.strictEqual(matchIntent('Yangqi Music').id, 'project_music');
+    assert.strictEqual(matchIntent('MusicForPer').id, 'project_music');
     assert.strictEqual(matchIntent('SmartSalon').id, 'project_smartsalon');
     assert.strictEqual(matchIntent('The-Booking-Site').id, 'project_booking');
     assert.strictEqual(matchIntent('POS_QUAN_LY_BAN_HANG').id, 'project_pos');
@@ -176,7 +197,11 @@ describe('matchIntent', () => {
     assert.strictEqual(matchIntent('resume').id, 'cv');
   });
 
-  it('correctly matches specific queries for SmartSalon, POS, and Booking site', () => {
+  it('correctly matches specific queries for GYM-management, Yangqi Music, SmartSalon, POS, and Booking site', () => {
+    assert.strictEqual(matchIntent('dự án gym').id, 'project_gym');
+    assert.strictEqual(matchIntent('devops gym').id, 'project_gym');
+    assert.strictEqual(matchIntent('dự án nhạc').id, 'project_music');
+    assert.strictEqual(matchIntent('google drive music').id, 'project_music');
     assert.strictEqual(matchIntent('dự án smartsalon').id, 'project_smartsalon');
     assert.strictEqual(matchIntent('đặt lịch salon').id, 'project_smartsalon');
     assert.strictEqual(matchIntent('hệ thống pos').id, 'project_pos');
@@ -184,6 +209,13 @@ describe('matchIntent', () => {
     assert.strictEqual(matchIntent('dự án booking').id, 'project_booking');
     assert.strictEqual(matchIntent('đặt phòng').id, 'project_booking');
     assert.strictEqual(matchIntent('portfolio này').id, 'project_myprofile');
+  });
+
+  it('matches newly added DevOps and Fullstack skill queries to skills intent', () => {
+    assert.strictEqual(matchIntent('TypeScript PostgreSQL').id, 'skills');
+    assert.strictEqual(matchIntent('AWS RDS CloudWatch').id, 'skills');
+    assert.strictEqual(matchIntent('Web Audio PWA').id, 'skills');
+    assert.strictEqual(matchIntent('auto-rollback').id, 'skills');
   });
 
   it('matches intent variations with punctuation and extra whitespace', () => {

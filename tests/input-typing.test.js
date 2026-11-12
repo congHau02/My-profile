@@ -114,6 +114,37 @@ describe('05: Chatbot Input Typing & Font Standardization', () => {
       assert.strictEqual(doc.documentElement.classList.contains('light'), false);
       assert.strictEqual(storage.getItem('portfolio-theme'), 'dark');
     });
+
+    it('initPortfolio coordinates theme, input guard, and companion bird sub-modules', () => {
+      const { doc, win, storage } = createMockDOM();
+      const portfolio = initPortfolio({ document: doc, window: win, storage });
+
+      assert.ok(portfolio, 'initPortfolio must return app interface');
+      assert.ok(portfolio.themeController, 'must provide themeController');
+      assert.ok(portfolio.inputGuard, 'must provide inputGuard');
+      assert.ok(portfolio.companionBird, 'must provide companionBird');
+      assert.strictEqual(typeof portfolio.switchTheme, 'function');
+    });
+
+    it('initCompanionBird initializes state machine with controllable docking', () => {
+      const { doc, win, makeElement } = createMockDOM({ innerWidth: 1024 });
+      const homeClip = makeElement('div');
+      homeClip.className = 'home__clip';
+      const boxBird = makeElement('div');
+      boxBird.className = 'box__img';
+      doc.body.appendChild(homeClip);
+      doc.body.appendChild(boxBird);
+
+      const bird = initPortfolio({ document: doc, window: win }).companionBird;
+      assert.ok(bird, 'companionBird must initialize');
+      assert.strictEqual(bird.getState(), 'IDLE_HERO');
+
+      bird.dockAndSleep();
+      assert.strictEqual(bird.getState(), 'SLEEPING');
+
+      bird.dockToHeroImmediately();
+      assert.strictEqual(bird.getState(), 'IDLE_HERO');
+    });
   });
 
   describe('chatbot.js Event Isolation', () => {

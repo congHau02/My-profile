@@ -19,9 +19,16 @@ const BIRD_H = 130;
 const HALF_W = 70;
 const HALF_H = 65;
 
+function resolveEnv(env = {}) {
+  return {
+    doc: env.document || (typeof document !== 'undefined' ? document : null),
+    win: env.window || (typeof window !== 'undefined' ? window : null),
+    storage: env.storage || (typeof localStorage !== 'undefined' ? localStorage : null)
+  };
+}
+
 function initCompanionBird(env = {}) {
-  const doc = env.document || (typeof document !== 'undefined' ? document : null);
-  const win = env.window || (typeof window !== 'undefined' ? window : null);
+  const { doc, win } = resolveEnv(env);
   if (!doc || !win) return null;
 
   const heroClip = doc.querySelector('.home__clip');
@@ -401,8 +408,7 @@ function initCompanionBird(env = {}) {
  * Responsive text heading helper
  */
 function initHeadingResponsive(env = {}) {
-  const doc = env.document || (typeof document !== 'undefined' ? document : null);
-  const win = env.window || (typeof window !== 'undefined' ? window : null);
+  const { doc, win } = resolveEnv(env);
   if (!doc || !win) return;
 
   const textStrong = doc.querySelector('.strong-primary');
@@ -422,8 +428,7 @@ function initHeadingResponsive(env = {}) {
  * editable inputs, textareas, and contentEditable nodes.
  */
 function initInputGuard(env = {}) {
-  const doc = env.document || (typeof document !== 'undefined' ? document : null);
-  const win = env.window || (typeof window !== 'undefined' ? window : null);
+  const { doc, win } = resolveEnv(env);
   if (!doc) return null;
 
   function isEditable(target) {
@@ -484,21 +489,20 @@ function initInputGuard(env = {}) {
  * Theme switcher with LocalStorage persistence.
  */
 function initThemeController(env = {}) {
-  const doc = env.document || (typeof document !== 'undefined' ? document : null);
-  const storage = env.storage || (typeof localStorage !== 'undefined' ? localStorage : null);
+  const { doc, storage } = resolveEnv(env);
   if (!doc) return { switchTheme() {} };
 
-  const htmlWeb = doc.documentElement;
+  const rootEl = doc.documentElement;
 
   function switchTheme(theme) {
-    if (!htmlWeb) return;
+    if (!rootEl) return;
     if (theme === 'light') {
-      htmlWeb.classList.add('light');
+      rootEl.classList.add('light');
       try {
         if (storage) storage.setItem('portfolio-theme', 'light');
       } catch (e) {}
     } else {
-      htmlWeb.classList.remove('light');
+      rootEl.classList.remove('light');
       try {
         if (storage) storage.setItem('portfolio-theme', 'dark');
       } catch (e) {}
@@ -521,7 +525,7 @@ function initThemeController(env = {}) {
 
   doc.querySelectorAll('.light--mode').forEach(function(wrapper) {
     wrapper.addEventListener('click', function() {
-      if (htmlWeb.classList.contains('light')) {
+      if (rootEl.classList.contains('light')) {
         switchTheme('dark');
       } else {
         switchTheme('light');
@@ -536,9 +540,7 @@ function initThemeController(env = {}) {
  * Main Portfolio entrypoint coordinating theme, shortcut guard, and companion bird.
  */
 function initPortfolio(env = {}) {
-  const doc = env.document || (typeof document !== 'undefined' ? document : null);
-  const win = env.window || (typeof window !== 'undefined' ? window : null);
-  const storage = env.storage || (typeof localStorage !== 'undefined' ? localStorage : null);
+  const { doc, win, storage } = resolveEnv(env);
 
   const themeController = initThemeController({ document: doc, storage });
   const inputGuard = initInputGuard({ document: doc, window: win });

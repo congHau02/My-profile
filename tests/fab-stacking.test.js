@@ -21,7 +21,7 @@ describe('02: Floating Action Button & onTop Stacking Refactor', () => {
       assert.match(onTopContent, /position:\s*fixed/i, '.onTop must be position: fixed');
       assert.match(onTopContent, /bottom:\s*88px/i, '.onTop must have bottom: 88px');
       assert.match(onTopContent, /right:\s*24px/i, '.onTop must have right: 24px');
-      assert.match(onTopContent, /z-index:\s*998/i, '.onTop must have z-index: 998');
+      assert.match(onTopContent, /z-index:\s*(var\(--z-on-top,\s*998\)|998)/i, '.onTop must have z-index: 998');
       assert.doesNotMatch(onTopContent, /position:\s*sticky/i, '.onTop must no longer be sticky');
       assert.doesNotMatch(onTopContent, /margin-top:\s*100vh/i, '.onTop must no longer have margin-top: 100vh');
     });
@@ -33,7 +33,7 @@ describe('02: Floating Action Button & onTop Stacking Refactor', () => {
       assert.match(commonCss, /\.ai-chatbot-toggle[^{]*\{[^}]*position:\s*fixed/i, 'chatbot toggle must be position: fixed');
       assert.match(commonCss, /\.ai-chatbot-toggle[^{]*\{[^}]*bottom:\s*24px/i, 'chatbot toggle must have bottom: 24px');
       assert.match(commonCss, /\.ai-chatbot-toggle[^{]*\{[^}]*right:\s*24px/i, 'chatbot toggle must have right: 24px');
-      assert.match(commonCss, /\.ai-chatbot-toggle[^{]*\{[^}]*z-index:\s*999/i, 'chatbot toggle must have z-index: 999');
+      assert.match(commonCss, /\.ai-chatbot-toggle[^{]*\{[^}]*z-index:\s*(var\(--z-chatbot-toggle,\s*999\)|999)/i, 'chatbot toggle must have z-index: 999');
       
       // Ensure class specificity is used (not ID selector) so mobile and hover rules aren't blocked
       assert.doesNotMatch(commonCss, /#ai-chatbot-toggle\s*,/i, 'Should use class selector to maintain consistent specificity');

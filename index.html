@@ -13,8 +13,8 @@
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nguyen Cong Hau | Full-Stack Software Engineer & Cloud DevOps Enthusiast</title>
-    <meta name="description" content="Portfolio của Nguyễn Công Hậu - Sinh viên CNTT tại UTC. Chuyên môn phát triển phần mềm Full-stack với ReactJS, Java Spring Boot và triển khai hạ tầng Cloud CI/CD trên nền tảng AWS.">
-    <meta name="keywords" content="Nguyen Cong Hau, Nguyễn Công Hậu, Portfolio, Full-Stack Developer, Software Engineer, UTC, ReactJS, Java Spring Boot, AWS, Docker, Terraform, CI/CD">
+    <meta name="description" content="Portfolio của Nguyễn Công Hậu - Sinh viên CNTT tại UTC. Chuyên môn phát triển phần mềm Full-stack với ReactJS, TypeScript, Java Spring Boot, PostgreSQL/Redis và triển khai hạ tầng Cloud CI/CD trên nền tảng AWS.">
+    <meta name="keywords" content="Nguyen Cong Hau, Nguyễn Công Hậu, Portfolio, Full-Stack Developer, DevOps Engineer, Software Engineer, UTC, ReactJS, TypeScript, Java Spring Boot, PostgreSQL, Redis, Flyway, Nginx, AWS, Docker, Terraform, CI/CD">
     <meta name="author" content="Nguyen Cong Hau">
     <link rel="canonical" href="https://conghau02.github.io/My-profile/">
 
@@ -304,11 +304,19 @@
                                 <span class="skill--badge skill--badge-extra">Docker</span>
                                 <span class="skill--badge skill--badge-extra">AWS ECR</span>
                                 <span class="skill--badge skill--badge-extra">AWS ECS Fargate</span>
+                                <span class="skill--badge skill--badge-extra">AWS RDS</span>
+                                <span class="skill--badge skill--badge-extra">AWS ALB</span>
+                                <span class="skill--badge skill--badge-extra">CloudWatch</span>
                                 <span class="skill--badge skill--badge-extra">GitHub Actions</span>
                                 <span class="skill--badge skill--badge-extra">Terraform</span>
                                 <span class="skill--badge skill--badge-extra">CI/CD (OIDC)</span>
+                                <span class="skill--badge skill--badge-extra">Nginx</span>
+                                <span class="skill--badge skill--badge-extra">TypeScript</span>
                                 <span class="skill--badge skill--badge-extra">Node.js</span>
+                                <span class="skill--badge skill--badge-extra">PostgreSQL</span>
                                 <span class="skill--badge skill--badge-extra">MySQL</span>
+                                <span class="skill--badge skill--badge-extra">Redis</span>
+                                <span class="skill--badge skill--badge-extra">Flyway</span>
                                 <span class="skill--badge skill--badge-extra">REST APIs</span>
                                 <span class="skill--badge skill--badge-extra">AWS S3</span>
                                 <span class="skill--badge skill--badge-extra">AI Agents</span>
@@ -330,7 +338,7 @@
                             <div class="deploy-pipeline__header">
                                 <span class="deploy-pipeline__badge">CI/CD & Cloud Infrastructure</span>
                                 <h3 class="deploy-pipeline__title">Deployment Pipeline Architecture</h3>
-                                <p class="deploy-pipeline__desc">Luồng tự động hóa phân phối và triển khai ứng dụng container hóa trên nền tảng đám mây AWS</p>
+                                <p class="deploy-pipeline__desc">Luồng CI/CD container hóa & tự động hóa hạ tầng AWS thực chiến (GYM-management)</p>
                             </div>
                             
                             <div class="deploy-pipeline__flow">
@@ -340,7 +348,7 @@
                                         <svg class="deploy-step__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
                                     </div>
                                     <span class="deploy-step__name">Mã nguồn</span>
-                                    <span class="deploy-step__sub">GitHub Repository</span>
+                                    <span class="deploy-step__sub">GitHub Monorepo & CI</span>
                                 </div>
 
                                 <!-- Arrow 1 -->
@@ -355,7 +363,7 @@
                                         <svg class="deploy-step__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
                                     </div>
                                     <span class="deploy-step__name">GitHub Actions</span>
-                                    <span class="deploy-step__sub">CI Pipeline & Build</span>
+                                    <span class="deploy-step__sub">Test, Build & Versioned Tag</span>
                                 </div>
 
                                 <!-- Arrow 2 with OIDC -->
@@ -371,7 +379,7 @@
                                         <svg class="deploy-step__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
                                     </div>
                                     <span class="deploy-step__name">AWS ECR</span>
-                                    <span class="deploy-step__sub">Container Registry</span>
+                                    <span class="deploy-step__sub">Versioned Images</span>
                                 </div>
 
                                 <!-- Arrow 3 -->
@@ -386,7 +394,7 @@
                                         <svg class="deploy-step__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
                                     </div>
                                     <span class="deploy-step__name">AWS ECS Fargate</span>
-                                    <span class="deploy-step__sub">Serverless Compute</span>
+                                    <span class="deploy-step__sub">Health Probes & Rollback</span>
                                 </div>
 
                                 <!-- Arrow 4 -->
@@ -400,8 +408,8 @@
                                     <div class="deploy-step__icon-box">
                                         <svg class="deploy-step__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
                                     </div>
-                                    <span class="deploy-step__name">ALB / Người dùng</span>
-                                    <span class="deploy-step__sub">Load Balancer & Users</span>
+                                    <span class="deploy-step__name">ALB & RDS</span>
+                                    <span class="deploy-step__sub">Traffic & Private DB</span>
                                 </div>
                             </div>
 
@@ -409,9 +417,9 @@
                             <div class="deploy-pipeline__foundation">
                                 <div class="deploy-foundation__arrow-up">▲</div>
                                 <div class="deploy-foundation__card">
-                                    <div class="deploy-foundation__badge">Infrastructure as Code (IaC)</div>
-                                    <strong class="deploy-foundation__name">Quản lý bởi Terraform</strong>
-                                    <span class="deploy-foundation__desc">Tự động khởi tạo và quản trị toàn bộ hạ tầng AWS (ECR, ECS Cluster, Task Definition, Service, ALB, Target Groups, Security Groups & OIDC Role).</span>
+                                    <div class="deploy-foundation__badge">Infrastructure as Code (IaC) & Lifecycle Control</div>
+                                    <strong class="deploy-foundation__name">Quản lý bởi Terraform & Self-Healing Deploy</strong>
+                                    <span class="deploy-foundation__desc">Tự động khởi tạo hạ tầng AWS (VPC, ALB, ECS Fargate, ECR, RDS MySQL Private Subnet, CloudWatch, IAM/OIDC), hỗ trợ Flyway Expand-Contract, pre-migration backup, Auto-Rollback và Hibernate về $0.</span>
                                 </div>
                             </div>
                         </div>
